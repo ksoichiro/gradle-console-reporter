@@ -69,6 +69,8 @@ class PluginSpec extends Specification {
 
         then:
         notThrown(Exception)
-        1 * printStream.println('com.example.ExampleTest: tests: 2, skipped: 0, failures: 0, errors: 0')
+        1 * printStream.println('com.example.ExampleTest: tests: 2, skipped: 0, failures: 0, errors: 0, time: 2.418')
+        1 * printStream.println('Hello, world!')
+        1 * printStream.println('Hello, Gradle!')
     }
 }

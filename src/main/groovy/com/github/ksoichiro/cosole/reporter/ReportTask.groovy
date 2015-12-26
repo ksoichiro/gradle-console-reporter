@@ -24,8 +24,11 @@ class ReportTask extends DefaultTask {
         def testReportDir = project.file("${project.buildDir}/test-results")
         if (testReportDir.exists()) {
             project.fileTree(dir: testReportDir, includes: ['**/*.xml']).each {
-                def rootNode = new XmlParser().parse(it)
-                println "${rootNode.@name}: tests: ${rootNode.@tests}, skipped: ${rootNode.@skipped}, failures: ${rootNode.@failures}, errors: ${rootNode.@errors}"
+                def rootNode = new XmlParser(false, false).parse(it)
+                println "${rootNode.@name}: tests: ${rootNode.@tests}, skipped: ${rootNode.@skipped}, failures: ${rootNode.@failures}, errors: ${rootNode.@errors}, time: ${rootNode.@time}"
+                rootNode."system-out".text().eachLine {
+                    println it
+                }
             }
 /*
     Example:
