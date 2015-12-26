@@ -1,0 +1,14 @@
+version: "{build}"
+
+build:
+  verbosity: detailed
+
+build_script:
+  - gradlew.bat --full-stacktrace clean build
+
+test_script:
+  - gradlew.bat --full-stacktrace check
+
+cache:
+  - .gradle
+  - C:\Users\appveyor\.gradle

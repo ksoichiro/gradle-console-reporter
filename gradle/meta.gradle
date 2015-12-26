@@ -1,0 +1,29 @@
+ext {
+    meta = [:]
+    meta.versionName = '0.0.1'
+    meta.group = 'com.github.ksoichiro'
+    meta.pomArtifactId = 'gradle-console-reporter'
+    meta.javaCompatibility = 1.6
+    meta.gitHubUsername = 'ksoichiro'
+    meta.gitHubFullname = 'Soichiro Kashima'
+    meta.gitHubUrl = "https://github.com/${meta.gitHubUsername}/${meta.pomArtifactId}"
+    meta.pomName = meta.pomArtifactId
+    meta.pomInceptionYear = '2015'
+    meta.pomDescription = 'Gradle plugin to report various kinds of summaries to console.'
+    meta.pomUrl = meta.gitHubUrl
+    meta.pomScmUrl = meta.gitHubUrl
+    meta.pomScmConnection = "scm:git@github.com/${meta.gitHubUsername}/${meta.pomArtifactId}.git"
+    meta.pomScmDevConnection = "scm:git@github.com:${meta.gitHubUsername}/${meta.pomArtifactId}.git"
+    meta.pomLicenseName = 'Apache Licence 2.0'
+    meta.pomLicenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0'
+    meta.pomLicenseDist = 'repo'
+    meta.pomDeveloperId = meta.gitHubUsername
+    meta.pomDeveloperName = meta.gitHubFullname
+    meta.pomDeveloperUrl = "http://github.com/${meta.gitHubUsername}"
+    meta.localRepositoryUrl = uri('.repo')
+    meta.pluginVcsurl = "https://github.com/${meta.gitHubUsername}/${meta.pomArtifactId}.git"
+    meta.pluginTags = []
+    meta.gradlePluginId = 'com.example.template'
+    meta.propNameOssrhUsername = 'ossrhUsername'
+    meta.propNameOssrhPassword = 'ossrhPassword'
+}

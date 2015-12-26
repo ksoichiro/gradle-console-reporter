@@ -1,0 +1,142 @@
+apply from: "${rootDir}/gradle/meta.gradle"
+
+group = meta.group
+version = meta.versionName
+archivesBaseName = meta.pomArtifactId
+sourceCompatibility = meta.javaCompatibility
+targetCompatibility = meta.javaCompatibility
+
+// To release:
+// ./gradlew clean assemble uploadArchives -Prelease
+def isReleaseBuild
+if (hasProperty("release")) {
+    isReleaseBuild = true
+}
+
+def sonatypeRepositoryUrl
+
+if (isReleaseBuild) {
+    if ("$version".endsWith('-SNAPSHOT')) {
+        sonatypeRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+    } else {
+        sonatypeRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+    }
+} else {
+    sonatypeRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+}
+
+def username = hasProperty(meta.propNameOssrhUsername) ? project.getProperty(meta.propNameOssrhUsername) : ""
+def password = hasProperty(meta.propNameOssrhPassword) ? project.getProperty(meta.propNameOssrhPassword) : ""
+
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = meta.pomArtifactId
+    }
+}
+
+afterEvaluate { project ->
+    uploadArchives {
+        if (isReleaseBuild) {
+            repositories {
+                mavenDeployer {
+                    beforeDeployment { deployment -> signing.signPom(deployment) }
+
+                    repository(url: sonatypeRepositoryUrl) {
+                        authentication(userName: username, password: password)
+                    }
+
+                    pom.project {
+                        name meta.pomName
+                        groupId meta.group
+                        description meta.pomDescription
+                        url POM_URL
+                        inceptionYear meta.pomInceptionYear
+
+                        scm {
+                            url meta.pomScmUrl
+                            connection meta.pomScmConnection
+                            developerConnection meta.pomScmDevConnection
+                        }
+
+                        licenses {
+                            license {
+                                name meta.pomLicenseName
+                                url meta.pomLicenseUrl
+                                distribution meta.pomLicenseDist
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id meta.pomDeveloperId
+                                name meta.pomDeveloperName
+                                url meta.pomDeveloperUrl
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // for development
+            repositories {
+                mavenDeployer {
+                    repository(url: meta.localRepositoryUrl)
+                }
+            }
+        }
+    }
+
+    // Enable this closure when executing uploadArchives
+    signing {
+        required { isReleaseBuild && gradle.taskGraph.hasTask("uploadArchives") }
+        sign configurations.archives
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from groovydoc
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+
+    publishing {
+        publications {
+            plugin(MavenPublication) {
+                groupId meta.group
+                artifactId meta.pomArtifactId
+                version meta.versionName
+
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+            }
+        }
+    }
+}
+
+pluginBundle {
+    website = meta.pomUrl
+    vcsUrl = meta.pluginVcsurl
+
+    description = meta.pomDescription
+
+    plugins {
+        plugin {
+            id = meta.gradlePluginId
+            displayName = meta.pomName
+            tags = meta.pluginTags
+        }
+    }
+
+    mavenCoordinates {
+        artifactId = meta.pomArtifactId
+    }
+}
