@@ -61,3 +61,12 @@ test {
 cobertura {
     coverageFormats = ['html', 'xml']
 }
+
+idea {
+    module {
+        excludeDirs += [
+            file('samples/simple/.gradle'),
+            file('samples/simple/build'),
+        ]
+    }
+}
