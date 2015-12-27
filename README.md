@@ -9,6 +9,24 @@ This might be useful when you use CI and if it cannot save artifacts.
 
 ## Configurations
 
+```gradle
+consoleReporter {
+    junit {
+        // Set this property to false if you don't need JUnit report.
+        // Default is true.
+        enabled true
+
+        // Set this property to false if you want to see console report always.
+        // Default is true.
+        reportOnFailure true
+
+        // Set this property to false if you don't need stacktrace.
+        // Default is true.
+        stacktraceEnabled true
+    }
+}
+```
+
 ## License
 
     Copyright 2015 Soichiro Kashima

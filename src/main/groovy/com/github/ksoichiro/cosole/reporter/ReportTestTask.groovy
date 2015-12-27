@@ -14,7 +14,7 @@ class ReportTestTask extends DefaultTask {
         project.afterEvaluate {
             extension = project.extensions."${ConsoleReporterExtension.NAME}"
 
-            if (extension.junitReportOnFailure) {
+            if (extension.junit.reportOnFailure) {
                 project.gradle.taskGraph.afterTask { Task task, TaskState state ->
                     if (task instanceof Test && state.failure) {
                         execute()
@@ -26,7 +26,7 @@ class ReportTestTask extends DefaultTask {
 
     @TaskAction
     void exec() {
-        if (extension.junitEnabled) {
+        if (extension.junit.enabled) {
             reportJUnit()
         }
     }
@@ -45,7 +45,7 @@ class ReportTestTask extends DefaultTask {
                 }
                 rootNode.testcase?.each { testcase ->
                     if (testcase.failure) {
-                        if (extension.junitReportStacktrace) {
+                        if (extension.junit.stacktraceEnabled) {
                             println "${testcase.@classname} > ${testcase.@name}: ${testcase.failure.text()}"
                         } else {
                             // Show message without stacktrace
