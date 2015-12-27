@@ -26,3 +26,9 @@ test {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
 }
+
+consoleReporter {
+    junit {
+        stacktraceEnabled false
+    }
+}

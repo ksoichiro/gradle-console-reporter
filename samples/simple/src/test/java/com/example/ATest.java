@@ -15,6 +15,6 @@ public class ATest {
 
     @Test
     public void greet() {
-        assertEquals("Hello", instance.greet());
+        assertEquals("Hello!", instance.greet());
     }
 }
