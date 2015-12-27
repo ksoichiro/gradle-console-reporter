@@ -49,7 +49,7 @@ afterEvaluate { project ->
                         name meta.pomName
                         groupId meta.group
                         description meta.pomDescription
-                        url POM_URL
+                        url meta.pomUrl
                         inceptionYear meta.pomInceptionYear
 
                         scm {
