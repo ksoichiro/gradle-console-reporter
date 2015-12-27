@@ -46,7 +46,11 @@ class PluginSpec extends Specification {
         Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
         project.apply plugin: PLUGIN_ID
         project.extensions."${ConsoleReporterExtension.NAME}".with {
-            junitEnabled = true
+            junit {
+                enabled true
+                summaryEnabled true
+                stdoutEnabled true
+            }
         }
         def testReportDir = new File("${rootDir}/build/test-results")
         testReportDir.mkdirs()
