@@ -1,5 +1,9 @@
 # gradle-console-reporter
 
+[![Build Status](https://travis-ci.org/ksoichiro/gradle-console-reporter.svg?branch=master)](https://travis-ci.org/ksoichiro/gradle-console-reporter)
+[![Build status](https://ci.appveyor.com/api/projects/status/y4e3vxvgfhg0xjef?svg=true)](https://ci.appveyor.com/project/ksoichiro/gradle-console-reporter)
+[![Coverage Status](https://coveralls.io/repos/ksoichiro/gradle-console-reporter/badge.svg?branch=master&service=github)](https://coveralls.io/github/ksoichiro/gradle-console-reporter?branch=master)
+
 > Gradle plugin to report various kinds of summaries to console.  
 
 This might be useful when you use CI and if it cannot save artifacts.  
