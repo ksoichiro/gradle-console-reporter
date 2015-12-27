@@ -15,11 +15,13 @@ public class ATest {
 
     @Test
     public void greet() {
+        System.out.println("debug log in test");
         assertEquals("Hello!", instance.greet());
     }
 
     @Test
     public void greet2() {
+        System.out.println("debug log in test2");
         assertEquals("Hello", instance.greet());
     }
 }

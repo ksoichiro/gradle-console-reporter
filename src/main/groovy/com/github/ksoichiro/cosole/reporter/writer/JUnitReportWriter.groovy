@@ -6,36 +6,34 @@ import com.github.ksoichiro.cosole.reporter.report.JUnitReport
 class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
     @Override
     void write(JUnitReport report, JUnitReportConfig config) {
-        report.testsuite.with {
+        report.testsuites.each { ts ->
             if (config.summaryEnabled) {
-                println "${name}: tests: ${tests}, skipped: ${skipped}, failures: ${failures}, errors: ${errors}, time: ${time}"
+                println "${ts.name}: tests: ${ts.tests}, skipped: ${ts.skipped}, failures: ${ts.failures}, errors: ${ts.errors}, time: ${ts.time}"
             }
             if (config.stdoutEnabled) {
-                systemOut.eachLine {
+                ts.systemOut.eachLine {
                     println it
                 }
             }
             if (config.stderrEnabled) {
-                systemErr.eachLine {
+                ts.systemErr.eachLine {
                     println it
                 }
             }
-            testcases.each { testcase ->
-                testcase.with {
-                    if (config.stacktraceEnabled) {
-                        if (failure.description != null && !failure.description.isEmpty()) {
-                            println "${classname} > ${name}: ${failure.description}"
+            ts.testcases.each { testcase ->
+                if (config.stacktraceEnabled) {
+                    if (testcase.failure.description != null && !testcase.failure.description.isEmpty()) {
+                        println "${testcase.classname} > ${testcase.name}: ${testcase.failure.description}"
+                    }
+                } else {
+                    // Show message without stacktrace
+                    def message = testcase.failure.message
+                    if (message != null && !message.isEmpty()) {
+                        // Remove '[' and ']'
+                        (message =~ /^\[(.*)]$/).each { all, containedMessage ->
+                            message = containedMessage
                         }
-                    } else {
-                        // Show message without stacktrace
-                        def message = failure.message
-                        if (message != null && !message.isEmpty()) {
-                            // Remove '[' and ']'
-                            (message =~ /^\[(.*)]$/).each { all, containedMessage ->
-                                message = containedMessage
-                            }
-                            println "${classname} > ${name}: ${message}"
-                        }
+                        println "${testcase.classname} > ${testcase.name}: ${message}"
                     }
                 }
             }

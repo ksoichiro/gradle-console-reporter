@@ -3,6 +3,7 @@ package com.github.ksoichiro.cosole.reporter.parser
 import com.github.ksoichiro.cosole.reporter.config.JUnitReportConfig
 import com.github.ksoichiro.cosole.reporter.report.JUnitReport
 import com.github.ksoichiro.cosole.reporter.report.junit.JUnitTestcase
+import com.github.ksoichiro.cosole.reporter.report.junit.JUnitTestsuite
 import org.gradle.api.Project
 
 class JUnitReportParser implements ReportParser<JUnitReport, JUnitReportConfig> {
@@ -13,10 +14,12 @@ class JUnitReportParser implements ReportParser<JUnitReport, JUnitReportConfig> 
         if (!testReportDir.exists()) {
             return report
         }
-        project.fileTree(dir: testReportDir, includes: ['**/*.xml']).each {
-            def rootNode = new XmlParser(false, false).parse(it)
-            if (config.summaryEnabled) {
-                report.testsuite.with {
+        project.fileTree(dir: testReportDir, includes: ['**/*.xml']).each { File file ->
+            def testsuite = new JUnitTestsuite()
+            report.testsuites += testsuite
+            testsuite.with {
+                def rootNode = new XmlParser(false, false).parse(file)
+                if (config.summaryEnabled) {
                     name = rootNode.@name
                     tests = rootNode.@tests
                     skipped = rootNode.@skipped
@@ -24,26 +27,28 @@ class JUnitReportParser implements ReportParser<JUnitReport, JUnitReportConfig> 
                     errors = rootNode.@errors
                     time = rootNode.@time
                 }
-            }
-            if (config.stdoutEnabled) {
-                report.testsuite.systemOut = rootNode."system-out".text()
-            }
-            if (config.stderrEnabled) {
-                report.testsuite.systemErr = rootNode."system-err".text()
-            }
-            rootNode.testcase?.each { testcase ->
-                def t = new JUnitTestcase()
-                t.with {
-                    name = testcase.@name
-                    classname = testcase.@classname
-                    time = testcase.@time
+                if (config.stdoutEnabled) {
+                    systemOut = rootNode."system-out".text()
                 }
-                if (testcase.failure) {
-                    t.failure.type = testcase.failure.@type
-                    t.failure.message = testcase.failure.@message
-                    t.failure.description = testcase.failure.text()
+                if (config.stderrEnabled) {
+                    systemErr = rootNode."system-err".text()
                 }
-                report.testsuite.testcases += t
+                rootNode.testcase?.each { testcase ->
+                    def t = new JUnitTestcase()
+                    t.with {
+                        name = testcase.@name
+                        classname = testcase.@classname
+                        time = testcase.@time
+                    }
+                    if (testcase.failure) {
+                        t.failure.with {
+                            type = testcase.failure.@type
+                            message = testcase.failure.@message
+                            description = testcase.failure.text()
+                        }
+                    }
+                    testcases += t
+                }
             }
         }
         report

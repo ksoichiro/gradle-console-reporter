@@ -21,14 +21,10 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
-test {
-    testLogging {
-        events "passed", "skipped", "failed", "standardOut", "standardError"
-    }
-}
-
 consoleReporter {
     junit {
-        stacktraceEnabled false
+        stdoutEnabled true
+        stderrEnabled true
+        stacktraceEnabled true
     }
 }

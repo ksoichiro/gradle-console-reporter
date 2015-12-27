@@ -1,11 +1,13 @@
 package com.github.ksoichiro.cosole.reporter.report
 
 import com.github.ksoichiro.cosole.reporter.report.junit.JUnitTestsuite
+import groovy.transform.ToString
 
+@ToString
 class JUnitReport implements Report {
-    JUnitTestsuite testsuite
+    List<JUnitTestsuite> testsuites
 
     JUnitReport() {
-        testsuite = new JUnitTestsuite()
+        testsuites = []
     }
 }
