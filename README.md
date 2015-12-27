@@ -21,8 +21,8 @@ plugins {
 
 When your tests fail, the plugin would print test failure details to the console.
 
-```
-➜  simple git:(master) ✗ ./gradlew test 
+```console
+$ ./gradlew test
 :compileJava UP-TO-DATE
 :processResources UP-TO-DATE
 :classes UP-TO-DATE
@@ -31,30 +31,50 @@ When your tests fail, the plugin would print test failure details to the console
 :testClasses UP-TO-DATE
 :test
 
+com.example.ATest > greet3 FAILED
+    org.junit.ComparisonFailure at ATest.java:31
+
 com.example.ATest > greet FAILED
-    org.junit.ComparisonFailure at ATest.java:18
+    org.junit.ComparisonFailure at ATest.java:19
 
 com.example.BTest > greet FAILED
     org.junit.ComparisonFailure at BTest.java:18
 
-2 tests completed, 2 failed
+5 tests completed, 3 failed
 :test FAILED
-com.example.ATest > greet: org.junit.ComparisonFailure: expected:<Hello[!]> but was:<Hello[]>
+testsuite com.example.ATest:
+  stdout:
+    debug log in test2
+    debug log
+    debug log
+    debug log in test
+    debug log
+  stderr:
+    debug error log in test3
+  testcase com.example.ATest > greet3: org.junit.ComparisonFailure: expected:<Hello[.]> but was:<Hello[]>
 	at org.junit.Assert.assertEquals(Assert.java:115)
 	at org.junit.Assert.assertEquals(Assert.java:144)
-	at com.example.ATest.greet(ATest.java:18)
+	at com.example.ATest.greet3(ATest.java:31)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
     ...
 	at java.lang.Thread.run(Thread.java:745)
 
-com.example.BTest > greet: org.junit.ComparisonFailure: expected:<Bye[!]> but was:<Bye[]>
+  testcase com.example.ATest > greet: org.junit.ComparisonFailure: expected:<Hello[!]> but was:<Hello[]>
+	at org.junit.Assert.assertEquals(Assert.java:115)
+	at org.junit.Assert.assertEquals(Assert.java:144)
+	at com.example.ATest.greet(ATest.java:19)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    ...
+	at java.lang.Thread.run(Thread.java:745)
+
+testsuite com.example.BTest:
+  testcase com.example.BTest > greet: org.junit.ComparisonFailure: expected:<Bye[!]> but was:<Bye[]>
 	at org.junit.Assert.assertEquals(Assert.java:115)
 	at org.junit.Assert.assertEquals(Assert.java:144)
 	at com.example.BTest.greet(BTest.java:18)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
     ...
 	at java.lang.Thread.run(Thread.java:745)
-
 ...
 ```
 
