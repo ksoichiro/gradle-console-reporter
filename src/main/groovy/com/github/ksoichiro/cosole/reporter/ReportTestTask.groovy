@@ -40,6 +40,9 @@ class ReportTestTask extends DefaultTask {
                 rootNode."system-out".text().eachLine {
                     println it
                 }
+                rootNode."system-err".text().eachLine {
+                    println it
+                }
                 rootNode.testcase?.each { testcase ->
                     if (testcase.failure) {
                         if (extension.junitReportStacktrace) {
