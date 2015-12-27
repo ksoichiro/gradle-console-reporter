@@ -55,6 +55,56 @@ class PluginSpec extends Specification {
         }
         def testReportDir = new File("${rootDir}/build/test-results")
         testReportDir.mkdirs()
+        writeSampleReport(testReportDir)
+
+        when:
+        project.evaluate()
+        project.tasks."${ReportTestTask.NAME}".execute()
+
+        then:
+        notThrown(Exception)
+        1 * printStream.println('com.example.ExampleTest: tests: 2, skipped: 0, failures: 1, errors: 0, time: 2.418')
+        1 * printStream.println('Hello, world!')
+        1 * printStream.println('Hello, Gradle!')
+    }
+
+    def executeTaskWithoutReport() {
+        setup:
+        Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
+        project.apply plugin: PLUGIN_ID
+
+        when:
+        project.evaluate()
+        project.tasks."${ReportTestTask.NAME}".execute()
+
+        then:
+        notThrown(Exception)
+    }
+
+    def executeTaskStacktraceDisabled() {
+        setup:
+        Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
+        project.apply plugin: PLUGIN_ID
+        project.extensions."${ConsoleReporterExtension.NAME}".with {
+            junit {
+                enabled true
+                stacktraceEnabled false
+            }
+        }
+        def testReportDir = new File("${rootDir}/build/test-results")
+        testReportDir.mkdirs()
+        writeSampleReport(testReportDir)
+
+        when:
+        project.evaluate()
+        project.tasks."${ReportTestTask.NAME}".execute()
+
+        then:
+        notThrown(Exception)
+        1 * printStream.println("com.github.ksoichiro.cosole.reporter.PluginTest > greet: org.junit.ComparisonFailure: expected:<Hello[!]> but was:<Hello[]>")
+    }
+
+    void writeSampleReport(File testReportDir) {
         new File("${testReportDir}/TEST-com.example.ExampleTest.xml").text = """\
             |<?xml version="1.0" encoding="UTF-8"?>
             |<testsuite name="com.example.ExampleTest" tests="2" skipped="0" failures="1" errors="0" timestamp="2015-12-26T13:55:30" hostname="localhost" time="2.418">
@@ -118,28 +168,5 @@ class PluginSpec extends Specification {
             |]]></system-err>
             |</testsuite>
             |""".stripMargin().stripIndent()
-
-        when:
-        project.evaluate()
-        project.tasks."${ReportTestTask.NAME}".execute()
-
-        then:
-        notThrown(Exception)
-        1 * printStream.println('com.example.ExampleTest: tests: 2, skipped: 0, failures: 1, errors: 0, time: 2.418')
-        1 * printStream.println('Hello, world!')
-        1 * printStream.println('Hello, Gradle!')
-    }
-
-    def executeTaskWithoutReport() {
-        setup:
-        Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
-        project.apply plugin: PLUGIN_ID
-
-        when:
-        project.evaluate()
-        project.tasks."${ReportTestTask.NAME}".execute()
-
-        then:
-        notThrown(Exception)
     }
 }
