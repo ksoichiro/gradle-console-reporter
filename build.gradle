@@ -66,6 +66,7 @@ cobertura {
 idea {
     module {
         excludeDirs += [
+            file('.repo'),
             file('samples/simple/.gradle'),
             file('samples/simple/build'),
         ]
