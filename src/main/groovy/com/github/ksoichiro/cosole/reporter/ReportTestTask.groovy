@@ -14,9 +14,11 @@ class ReportTestTask extends DefaultTask {
         project.afterEvaluate {
             extension = project.extensions."${ConsoleReporterExtension.NAME}"
 
-            project.gradle.taskGraph.afterTask { Task task, TaskState state ->
-                if (task instanceof Test && state.failure) {
-                    execute()
+            if (extension.junitReportOnFailure) {
+                project.gradle.taskGraph.afterTask { Task task, TaskState state ->
+                    if (task instanceof Test && state.failure) {
+                        execute()
+                    }
                 }
             }
         }
