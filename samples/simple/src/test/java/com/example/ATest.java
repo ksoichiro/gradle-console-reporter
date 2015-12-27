@@ -24,4 +24,10 @@ public class ATest {
         System.out.println("debug log in test2");
         assertEquals("Hello", instance.greet());
     }
+
+    @Test
+    public void greet3() {
+        System.err.println("debug error log in test3");
+        assertEquals("Hello.", instance.greet());
+    }
 }
