@@ -6,7 +6,9 @@
 
 > Gradle plugin to report various kinds of summaries to console.  
 
-This might be useful when you use CI and if it cannot save artifacts.  
+This plugin will aggregate test reports and show them to console.  
+It's useful when you use CI services that don't save artifacts.
+
 Currently, only JUnit test report is available.
 
 ## Usage
