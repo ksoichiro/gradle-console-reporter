@@ -38,7 +38,7 @@ class PluginSpec extends Specification {
 
         then:
         notThrown(Exception)
-        project.tasks."${ReportTask.NAME}" instanceof ReportTask
+        project.tasks."${ReportTestTask.NAME}" instanceof ReportTestTask
     }
 
     def executeTask() {
@@ -65,7 +65,7 @@ class PluginSpec extends Specification {
 
         when:
         project.evaluate()
-        project.tasks."${ReportTask.NAME}".execute()
+        project.tasks."${ReportTestTask.NAME}".execute()
 
         then:
         notThrown(Exception)

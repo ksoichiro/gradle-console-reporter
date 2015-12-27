@@ -1,15 +1,24 @@
 package com.github.ksoichiro.cosole.reporter
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.Task
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.TaskState
+import org.gradle.api.tasks.testing.Test
 
-class ReportTask extends DefaultTask {
-    public static String NAME = 'report'
+class ReportTestTask extends DefaultTask {
+    public static String NAME = 'reportTest'
     ConsoleReporterExtension extension
 
-    ReportTask() {
+    ReportTestTask() {
         project.afterEvaluate {
             extension = project.extensions."${ConsoleReporterExtension.NAME}"
+
+            project.gradle.taskGraph.afterTask { Task task, TaskState state ->
+                if (task instanceof Test && state.failure) {
+                    execute()
+                }
+            }
         }
     }
 

@@ -7,6 +7,6 @@ class ConsoleReporterPlugin implements Plugin<Project> {
     @Override
     void apply(Project target) {
         target.extensions.create(ConsoleReporterExtension.NAME, ConsoleReporterExtension)
-        target.tasks.create(ReportTask.NAME, ReportTask)
+        target.tasks.create(ReportTestTask.NAME, ReportTestTask)
     }
 }

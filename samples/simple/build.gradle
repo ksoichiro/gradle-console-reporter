@@ -21,16 +21,8 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
-report.dependsOn 'test'
-
 test {
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
-    }
-}
-
-gradle.taskGraph.afterTask { Task task, TaskState state ->
-    if (task instanceof Test && state.failure) {
-        report.execute()
     }
 }
