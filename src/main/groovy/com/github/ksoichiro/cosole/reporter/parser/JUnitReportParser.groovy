@@ -19,14 +19,12 @@ class JUnitReportParser implements ReportParser<JUnitReport, JUnitReportConfig> 
             report.testsuites += testsuite
             testsuite.with {
                 def rootNode = new XmlParser(false, false).parse(file)
-                if (config.summaryEnabled) {
-                    name = rootNode.@name
-                    tests = rootNode.@tests
-                    skipped = rootNode.@skipped
-                    failures = rootNode.@failures
-                    errors = rootNode.@errors
-                    time = rootNode.@time
-                }
+                name = rootNode.@name
+                tests = rootNode.@tests
+                skipped = rootNode.@skipped
+                failures = rootNode.@failures
+                errors = rootNode.@errors
+                time = rootNode.@time
                 if (config.stdoutEnabled) {
                     systemOut = rootNode."system-out".text()
                 }
@@ -41,6 +39,7 @@ class JUnitReportParser implements ReportParser<JUnitReport, JUnitReportConfig> 
                         time = testcase.@time
                     }
                     if (testcase.failure) {
+                        t.failed = true
                         t.failure.with {
                             type = testcase.failure.@type
                             message = testcase.failure.@message

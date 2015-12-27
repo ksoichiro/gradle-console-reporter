@@ -8,6 +8,7 @@ class JUnitTestcase {
     String name
     String time
     JUnitFailure failure
+    boolean failed
 
     JUnitTestcase() {
         failure = new JUnitFailure()
