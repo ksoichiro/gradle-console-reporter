@@ -36,12 +36,18 @@ class ReportTestTask extends DefaultTask {
         if (testReportDir.exists()) {
             project.fileTree(dir: testReportDir, includes: ['**/*.xml']).each {
                 def rootNode = new XmlParser(false, false).parse(it)
-                println "${rootNode.@name}: tests: ${rootNode.@tests}, skipped: ${rootNode.@skipped}, failures: ${rootNode.@failures}, errors: ${rootNode.@errors}, time: ${rootNode.@time}"
-                rootNode."system-out".text().eachLine {
-                    println it
+                if (extension.junit.summaryEnabled) {
+                    println "${rootNode.@name}: tests: ${rootNode.@tests}, skipped: ${rootNode.@skipped}, failures: ${rootNode.@failures}, errors: ${rootNode.@errors}, time: ${rootNode.@time}"
                 }
-                rootNode."system-err".text().eachLine {
-                    println it
+                if (extension.junit.stdoutEnabled) {
+                    rootNode."system-out".text().eachLine {
+                        println it
+                    }
+                }
+                if (extension.junit.stderrEnabled) {
+                    rootNode."system-err".text().eachLine {
+                        println it
+                    }
                 }
                 rootNode.testcase?.each { testcase ->
                     if (testcase.failure) {
