@@ -1,6 +1,8 @@
-package com.github.ksoichiro.cosole.reporter
+package com.github.ksoichiro.cosole.reporter.config
 
-class JUnitReport {
+import com.github.ksoichiro.cosole.reporter.report.JUnitReport
+
+class JUnitReportConfig implements ReportConfig<JUnitReport> {
     boolean enabled = true
     boolean reportOnFailure = true
     boolean summaryEnabled = false
