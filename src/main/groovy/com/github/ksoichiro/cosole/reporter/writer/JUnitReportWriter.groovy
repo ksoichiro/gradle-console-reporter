@@ -23,15 +23,19 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             testcases.each { testcase ->
                 testcase.with {
                     if (config.stacktraceEnabled) {
-                        println "${classname} > ${name}: ${failure.description}"
+                        if (failure.description != null && !failure.description.isEmpty()) {
+                            println "${classname} > ${name}: ${failure.description}"
+                        }
                     } else {
                         // Show message without stacktrace
                         def message = failure.message
-                        // Remove '[' and ']'
-                        (message =~ /^\[(.*)]$/).each { all, containedMessage ->
-                            message = containedMessage
+                        if (message != null && !message.isEmpty()) {
+                            // Remove '[' and ']'
+                            (message =~ /^\[(.*)]$/).each { all, containedMessage ->
+                                message = containedMessage
+                            }
+                            println "${classname} > ${name}: ${message}"
                         }
-                        println "${classname} > ${name}: ${message}"
                     }
                 }
             }
