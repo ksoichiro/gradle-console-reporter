@@ -81,6 +81,18 @@ consoleReporter {
         // Default is true.
         reportOnFailure true
 
+        // Set this property to true if you want to see test summary.
+        // Default is false.
+        summaryEnabled true
+
+        // Set this property to true if you want to see standard output.
+        // Default is false.
+        stdoutEnabled true
+
+        // Set this property to true if you want to see standard error.
+        // Default is false.
+        stderrEnabled true
+
         // Set this property to false if you don't need stacktrace.
         // Default is true.
         stacktraceEnabled true
