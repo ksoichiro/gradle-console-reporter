@@ -42,7 +42,17 @@ class ReportTestTask extends DefaultTask {
                 }
                 rootNode.testcase?.each { testcase ->
                     if (testcase.failure) {
-                        println "${testcase.@classname} > ${testcase.@name}: ${testcase.failure.text()}"
+                        if (extension.junitReportStacktrace) {
+                            println "${testcase.@classname} > ${testcase.@name}: ${testcase.failure.text()}"
+                        } else {
+                            // Show message without stacktrace
+                            def message = testcase.failure.@message
+                            // Remove '[' and ']'
+                            (message =~ /^\[(.*)]$/).each { all, containedMessage ->
+                                message = containedMessage
+                            }
+                            println "${testcase.@classname} > ${testcase.@name}: ${message}"
+                        }
                     }
                 }
             }

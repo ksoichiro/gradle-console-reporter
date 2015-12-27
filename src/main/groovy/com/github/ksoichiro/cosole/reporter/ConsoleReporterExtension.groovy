@@ -4,4 +4,5 @@ class ConsoleReporterExtension {
     public static final NAME = 'consoleReporter'
     boolean junitEnabled = true
     boolean junitReportOnFailure = true
+    boolean junitReportStacktrace = true
 }
