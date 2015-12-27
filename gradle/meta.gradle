@@ -22,8 +22,8 @@ ext {
     meta.pomDeveloperUrl = "http://github.com/${meta.gitHubUsername}"
     meta.localRepositoryUrl = uri('.repo')
     meta.pluginVcsurl = "https://github.com/${meta.gitHubUsername}/${meta.pomArtifactId}.git"
-    meta.pluginTags = []
-    meta.gradlePluginId = 'com.example.template'
+    meta.pluginTags = ['testing', 'junit', 'reporting']
+    meta.gradlePluginId = 'com.github.ksoichiro.console.reporter'
     meta.propNameOssrhUsername = 'ossrhUsername'
     meta.propNameOssrhPassword = 'ossrhPassword'
 }
