@@ -1,9 +1,9 @@
-package com.github.ksoichiro.cosole.reporter.parser
+package com.github.ksoichiro.console.reporter.parser
 
-import com.github.ksoichiro.cosole.reporter.config.JUnitReportConfig
-import com.github.ksoichiro.cosole.reporter.report.JUnitReport
-import com.github.ksoichiro.cosole.reporter.report.junit.JUnitTestcase
-import com.github.ksoichiro.cosole.reporter.report.junit.JUnitTestsuite
+import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
+import com.github.ksoichiro.console.reporter.report.JUnitReport
+import com.github.ksoichiro.console.reporter.report.junit.JUnitTestcase
+import com.github.ksoichiro.console.reporter.report.junit.JUnitTestsuite
 import org.gradle.api.Project
 
 class JUnitReportParser implements ReportParser<JUnitReport, JUnitReportConfig> {

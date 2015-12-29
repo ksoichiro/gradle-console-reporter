@@ -1,6 +1,6 @@
-package com.github.ksoichiro.cosole.reporter
+package com.github.ksoichiro.console.reporter
 
-import com.github.ksoichiro.cosole.reporter.config.JUnitReportConfig
+import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
 import org.gradle.api.GradleException
 import org.gradle.util.ConfigureUtil
 

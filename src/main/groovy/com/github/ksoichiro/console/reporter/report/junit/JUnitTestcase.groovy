@@ -1,4 +1,4 @@
-package com.github.ksoichiro.cosole.reporter.report.junit
+package com.github.ksoichiro.console.reporter.report.junit
 
 import groovy.transform.ToString
 

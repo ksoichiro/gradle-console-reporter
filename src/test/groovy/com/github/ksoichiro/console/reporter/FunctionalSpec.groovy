@@ -1,4 +1,4 @@
-package com.github.ksoichiro.cosole.reporter
+package com.github.ksoichiro.console.reporter
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome

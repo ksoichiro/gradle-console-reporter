@@ -1,7 +1,7 @@
-package com.github.ksoichiro.cosole.reporter.writer
+package com.github.ksoichiro.console.reporter.writer
 
-import com.github.ksoichiro.cosole.reporter.config.JUnitReportConfig
-import com.github.ksoichiro.cosole.reporter.report.JUnitReport
+import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
+import com.github.ksoichiro.console.reporter.report.JUnitReport
 
 class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
     public static final String INDENT = "  "

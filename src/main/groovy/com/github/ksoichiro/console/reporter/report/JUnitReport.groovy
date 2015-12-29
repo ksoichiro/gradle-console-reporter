@@ -1,6 +1,6 @@
-package com.github.ksoichiro.cosole.reporter.report
+package com.github.ksoichiro.console.reporter.report
 
-import com.github.ksoichiro.cosole.reporter.report.junit.JUnitTestsuite
+import com.github.ksoichiro.console.reporter.report.junit.JUnitTestsuite
 import groovy.transform.ToString
 
 @ToString

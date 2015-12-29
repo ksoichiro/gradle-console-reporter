@@ -1,8 +1,8 @@
-package com.github.ksoichiro.cosole.reporter
+package com.github.ksoichiro.console.reporter
 
-import com.github.ksoichiro.cosole.reporter.parser.JUnitReportParser
-import com.github.ksoichiro.cosole.reporter.report.JUnitReport
-import com.github.ksoichiro.cosole.reporter.writer.JUnitReportWriter
+import com.github.ksoichiro.console.reporter.parser.JUnitReportParser
+import com.github.ksoichiro.console.reporter.report.JUnitReport
+import com.github.ksoichiro.console.reporter.writer.JUnitReportWriter
 import org.gradle.api.DefaultTask
 import org.gradle.api.Task
 import org.gradle.api.tasks.TaskAction

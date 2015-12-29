@@ -1,5 +1,7 @@
-package com.github.ksoichiro.cosole.reporter
+package com.github.ksoichiro.console.reporter
 
+import com.github.ksoichiro.console.reporter.ConsoleReporterExtension
+import com.github.ksoichiro.console.reporter.ReportTestTask
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
@@ -107,7 +109,7 @@ class PluginSpec extends Specification {
         notThrown(Exception)
         0 * printStream.println('  stdout:')
         0 * printStream.println('  stderr:')
-        1 * printStream.println("  testcase com.github.ksoichiro.cosole.reporter.PluginTest > greet: org.junit.ComparisonFailure: expected:<Hello[!]> but was:<Hello[]>")
+        1 * printStream.println("  testcase com.github.ksoichiro.console.reporter.PluginTest > greet: org.junit.ComparisonFailure: expected:<Hello[!]> but was:<Hello[]>")
     }
 
     void writeSampleReport(File testReportDir) {
@@ -115,8 +117,8 @@ class PluginSpec extends Specification {
             |<?xml version="1.0" encoding="UTF-8"?>
             |<testsuite name="com.example.ExampleTest" tests="2" skipped="0" failures="1" errors="0" timestamp="2015-12-26T13:55:30" hostname="localhost" time="2.418">
             |<properties/>
-            |<testcase name="executeTask" classname="com.github.ksoichiro.cosole.reporter.PluginTest" time="2.374"/>
-            |<testcase name="greet" classname="com.github.ksoichiro.cosole.reporter.PluginTest" time="0.044">
+            |<testcase name="executeTask" classname="com.github.ksoichiro.console.reporter.PluginTest" time="2.374"/>
+            |<testcase name="greet" classname="com.github.ksoichiro.console.reporter.PluginTest" time="0.044">
             |    <failure message="org.junit.ComparisonFailure: expected:&lt;Hello[!]&gt; but was:&lt;Hello[]&gt;" type="org.junit.ComparisonFailure">org.junit.ComparisonFailure: expected:&lt;Hello[!]&gt; but was:&lt;Hello[]&gt;
             |\tat org.junit.Assert.assertEquals(Assert.java:115)
             |\tat org.junit.Assert.assertEquals(Assert.java:144)

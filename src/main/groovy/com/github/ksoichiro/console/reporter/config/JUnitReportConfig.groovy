@@ -1,6 +1,6 @@
-package com.github.ksoichiro.cosole.reporter.config
+package com.github.ksoichiro.console.reporter.config
 
-import com.github.ksoichiro.cosole.reporter.report.JUnitReport
+import com.github.ksoichiro.console.reporter.report.JUnitReport
 
 class JUnitReportConfig implements ReportConfig<JUnitReport> {
     boolean enabled = true
