@@ -69,6 +69,8 @@ idea {
             file('.repo'),
             file('samples/simple/.gradle'),
             file('samples/simple/build'),
+            file('samples/jacoco/.gradle'),
+            file('samples/jacoco/build'),
         ]
     }
 }

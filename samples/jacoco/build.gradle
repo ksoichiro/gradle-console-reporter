@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url uri('../../.repo')
+        }
+    }
+    dependencies {
+        classpath 'com.github.ksoichiro:gradle-console-reporter:+'
+    }
+}
+
+apply plugin: 'com.github.ksoichiro.console.reporter'
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.11'
+}
+
+consoleReporter {
+    junit {
+        stdoutEnabled true
+        stderrEnabled true
+        stacktraceEnabled true
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
