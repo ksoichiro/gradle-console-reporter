@@ -71,6 +71,9 @@ idea {
             file('samples/simple/build'),
             file('samples/jacoco/.gradle'),
             file('samples/jacoco/build'),
+            file('samples/jacoco-multi/.gradle'),
+            file('samples/jacoco-multi/project1/build'),
+            file('samples/jacoco-multi/project2/build'),
         ]
     }
 }

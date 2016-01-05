@@ -17,7 +17,7 @@ class ReportJacocoTask extends DefaultTask {
             extension = project.extensions."${ConsoleReporterExtension.NAME}"
 
             project.gradle.taskGraph.afterTask { Task task, TaskState state ->
-                if (task instanceof org.gradle.testing.jacoco.tasks.JacocoReport) {
+                if (task instanceof org.gradle.testing.jacoco.tasks.JacocoReport && task.project == project) {
                     execute()
                 }
             }
