@@ -1,7 +1,5 @@
 package com.github.ksoichiro.console.reporter
 
-import com.github.ksoichiro.console.reporter.ConsoleReporterExtension
-import com.github.ksoichiro.console.reporter.ReportTestTask
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
