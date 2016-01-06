@@ -10,7 +10,7 @@ class JacocoReportParser implements ReportParser<JacocoReport, JacocoReportConfi
     @Override
     JacocoReport parse(Project project, JacocoReportConfig config) {
         JacocoReport report = new JacocoReport()
-        def testReportFile = project.file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        def testReportFile = config.reportFile ?: project.file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
         if (!testReportFile.exists()) {
             return report
         }
