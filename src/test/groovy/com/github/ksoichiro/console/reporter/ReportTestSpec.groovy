@@ -6,7 +6,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-class PluginSpec extends Specification {
+class ReportTestSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
 
     @Rule

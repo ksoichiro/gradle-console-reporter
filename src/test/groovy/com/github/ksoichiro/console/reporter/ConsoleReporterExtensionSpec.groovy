@@ -13,6 +13,9 @@ class ConsoleReporterExtensionSpec extends Specification {
             junit {
                 enabled true
             }
+            jacoco {
+                enabled true
+            }
         }
 
         then:
