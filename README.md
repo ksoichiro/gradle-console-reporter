@@ -83,12 +83,30 @@ testsuite com.example.BTest:
 You can suppress stacktrace by configuring the plugin.  
 See [configurations](#configurations) section for details.
 
+If you're using JaCoCo gradle plugin, you can see the coverage
+at the end of the jacocoTestReport task:
+
+```console
+$ ./gradlew jacocoTestReport
+:compileJava
+:processResources
+:classes
+:jacocoTestReport
+C0 Coverage: 72.2%
+
+```
+
 ## Tasks
 
 ### reportTest
 
 Print JUnit test report.  
 This task will be executed automatically after `test` task's failure by default, so you don't need to call it.
+
+### reportJacoco
+
+Print JaCoCo coverage report.
+This task will be executed automatically after `jacocoTestReport` task by default, so you don't need to call it.
 
 ## Configurations
 
@@ -118,6 +136,47 @@ consoleReporter {
         // Set this property to false if you don't need stacktrace.
         // Default is true.
         stacktraceEnabled true
+    }
+
+    jacoco {
+        // Set this property to false if you don't need JaCoCo report.
+        // Default is true.
+        // Even if this is true, reporting will not work
+        // without applying jacoco plugin.
+        enabled true
+
+        // Set this property to false if you want to see console report always.
+        onlyWhenJacocoTaskExecuted true
+        // Set this property to your custom JacocoReport type task name, if you need.
+        // Default is 'jacocoTestReport'.
+        jacocoTaskName 'jacocoTestReport'
+
+        // Set this property to your JaCoCo report XML file.
+        // Default is null, which means
+        // ${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml
+        // will be parsed.
+        reportFile
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is greater than or equals to this value,
+        // the coverage will be shown with green color.
+        // Default is 90.
+        thresholdFine 90
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is greater than or equals to this value,
+        // the coverage will be shown with yellow color.
+        // (When the coverage is less than this value, result will be red.)
+        // Default is 70.
+        thresholdWarning 70
+    }
+}
+
+// You need to set xml.enabled to true
+// if you want to print report for JaCoCo.
+jacocoTestReport {
+    reports {
+        xml.enabled true
     }
 }
 ```
