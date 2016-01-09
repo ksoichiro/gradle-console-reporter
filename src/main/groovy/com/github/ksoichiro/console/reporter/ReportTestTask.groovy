@@ -36,6 +36,6 @@ class ReportTestTask extends DefaultTask {
 
     void reportJUnit() {
         JUnitReport report = new JUnitReportParser().parse(project, extension.junit)
-        new JUnitReportWriter().write(report, extension.junit)
+        new JUnitReportWriter().write(project, report, extension.junit)
     }
 }

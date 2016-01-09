@@ -5,6 +5,7 @@ import com.github.ksoichiro.console.reporter.report.JacocoReport
 class JacocoReportConfig implements ReportConfig<JacocoReport> {
     boolean enabled = true
     boolean onlyWhenJacocoTaskExecuted = true
+    boolean reportAfterBuildFinished = true
     String jacocoTaskName = 'jacocoTestReport'
     File reportFile
     int thresholdFine = 90

@@ -88,12 +88,22 @@ at the end of the jacocoTestReport task:
 
 ```console
 $ ./gradlew jacocoTestReport
-:compileJava
-:processResources
-:classes
-:jacocoTestReport
-C0 Coverage: 72.2%
+:project1:compileJava
+:project1:processResources
+:project1:classes
+:project1:jacocoTestReport
+:project2-with-long-name:compileJava
+:project2-with-long-name:processResources
+:project2-with-long-name:classes
+:project2-with-long-name:jacocoTestReport
 
+BUILD SUCCESSFUL
+
+Total time: 4.912 secs
+
+Coverage summary:
+project1:                72.2%
+project2-with-long-name: 44.4%
 ```
 
 ## Tasks
@@ -147,6 +157,12 @@ consoleReporter {
 
         // Set this property to false if you want to see console report always.
         onlyWhenJacocoTaskExecuted true
+
+        // Set this property to false if you want to see console report
+        // just after each project's jacocoTestReport task.
+        // If set to true, all reports will be shown at the end of builds.
+        // Default is true.
+        reportAfterBuildFinished true
 
         // Set this property to your custom JacocoReport type task name, if you need.
         // Default is 'jacocoTestReport'.

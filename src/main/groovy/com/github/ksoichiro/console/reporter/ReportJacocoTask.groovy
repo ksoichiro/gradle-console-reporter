@@ -33,6 +33,6 @@ class ReportJacocoTask extends DefaultTask {
 
     void reportJacoco() {
         JacocoReport report = new JacocoReportParser().parse(project, extension.jacoco)
-        new JacocoReportWriter().write(report, extension.jacoco)
+        new JacocoReportWriter().write(project, report, extension.jacoco)
     }
 }

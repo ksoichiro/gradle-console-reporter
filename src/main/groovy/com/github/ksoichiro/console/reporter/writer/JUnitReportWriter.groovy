@@ -2,12 +2,13 @@ package com.github.ksoichiro.console.reporter.writer
 
 import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
 import com.github.ksoichiro.console.reporter.report.JUnitReport
+import org.gradle.api.Project
 
 class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
     public static final String INDENT = "  "
 
     @Override
-    void write(JUnitReport report, JUnitReportConfig config) {
+    void write(Project project, JUnitReport report, JUnitReportConfig config) {
         report.testsuites.findAll { it.testcases.any { it.failed} }.each { ts ->
             printlnWithIndent(0, "testsuite ${ts.name}:")
             if (config.summaryEnabled) {
