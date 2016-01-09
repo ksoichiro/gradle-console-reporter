@@ -9,7 +9,7 @@
 This plugin will aggregate test reports and show them to console.  
 It's useful when you use CI services that don't save artifacts.
 
-Currently, only JUnit test report is available.
+Currently, JUnit test report and JaCoCo coverage report is available.
 
 ## Usage
 
@@ -147,6 +147,7 @@ consoleReporter {
 
         // Set this property to false if you want to see console report always.
         onlyWhenJacocoTaskExecuted true
+
         // Set this property to your custom JacocoReport type task name, if you need.
         // Default is 'jacocoTestReport'.
         jacocoTaskName 'jacocoTestReport'
