@@ -1,18 +1,10 @@
 package com.github.ksoichiro.console.reporter
 
-import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.execution.TaskExecutionGraph
-import org.gradle.api.invocation.Gradle
 import org.gradle.testfixtures.ProjectBuilder
-import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
-
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
 
 class ReportJacocoSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
