@@ -28,6 +28,9 @@ consoleReporter {
         stderrEnabled true
         stacktraceEnabled true
     }
+    jacoco {
+        thresholdFine 50
+    }
 }
 
 jacocoTestReport {

@@ -7,6 +7,8 @@ class JacocoReportConfig implements ReportConfig<JacocoReport> {
     boolean onlyWhenJacocoTaskExecuted = true
     String jacocoTaskName = 'jacocoTestReport'
     File reportFile
+    int thresholdFine = 90
+    int thresholdWarning = 70
 
     def methodMissing(String name, args) {
         this."$name" = args[0]

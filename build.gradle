@@ -45,6 +45,7 @@ task createClasspathManifest {
 dependencies {
     compile gradleApi()
     compile localGroovy()
+    compile 'org.fusesource.jansi:jansi:1.11'
     testRuntime files(createClasspathManifest)
     testCompile gradleTestKit()
     testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
