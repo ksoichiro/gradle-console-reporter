@@ -17,7 +17,7 @@ Just apply the plugin:
 
 ```gradle
 plugins {
-    id 'com.github.ksoichiro.console.reporter' version '0.1.3'
+    id 'com.github.ksoichiro.console.reporter' version '0.2.0'
 }
 ```
 
