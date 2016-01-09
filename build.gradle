@@ -78,3 +78,5 @@ idea {
         ]
     }
 }
+
+check.dependsOn('cobertura')
