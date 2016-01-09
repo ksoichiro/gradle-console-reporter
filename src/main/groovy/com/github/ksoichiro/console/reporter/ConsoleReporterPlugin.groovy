@@ -9,5 +9,6 @@ class ConsoleReporterPlugin implements Plugin<Project> {
         target.extensions.create(ConsoleReporterExtension.NAME, ConsoleReporterExtension)
         target.tasks.create(ReportTestTask.NAME, ReportTestTask)
         target.tasks.create(ReportJacocoTask.NAME, ReportJacocoTask)
+        target.tasks.create(ReportCoberturaTask.NAME, ReportCoberturaTask)
     }
 }

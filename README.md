@@ -9,7 +9,7 @@
 This plugin will aggregate test reports and show them to console.  
 It's useful when you use CI services that don't save artifacts.
 
-Currently, JUnit test report and JaCoCo coverage report is available.
+Currently, JUnit test report, JaCoCo coverage report and Cobertura coverage report is available.
 
 ## Usage
 
@@ -84,7 +84,7 @@ You can suppress stacktrace by configuring the plugin.
 See [configurations](#configurations) section for details.
 
 If you're using JaCoCo gradle plugin, you can see the coverage
-at the end of the jacocoTestReport task:
+at the end of builds:
 
 ```console
 $ ./gradlew jacocoTestReport
@@ -106,6 +106,41 @@ project1:                72.2%
 project2-with-long-name: 44.4%
 ```
 
+If you're using gradle-cobertura-plugin, you can see the coverage
+at the end of builds:
+
+```console
+$ ./gradlew cobertura
+:coberturaReport UP-TO-DATE
+:compileJava UP-TO-DATE
+:processResources UP-TO-DATE
+:classes UP-TO-DATE
+:instrument
+Cobertura 2.1.1 - GNU GPL License (NO WARRANTY) - See COPYRIGHT file
+:copyCoberturaDatafile
+:compileTestJava UP-TO-DATE
+:processTestResources UP-TO-DATE
+:testClasses UP-TO-DATE
+:test
+log4j:WARN No appenders could be found for logger (net.sourceforge.cobertura.coveragedata.TouchCollector).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+:generateCoberturaReport
+Cobertura 2.1.1 - GNU GPL License (NO WARRANTY) - See COPYRIGHT file
+Report time: 132ms
+Cobertura 2.1.1 - GNU GPL License (NO WARRANTY) - See COPYRIGHT file
+Report time: 111ms
+:performCoverageCheck SKIPPED
+:cobertura
+
+BUILD SUCCESSFUL
+
+Total time: 8.396 secs
+
+Coverage summary:
+cobertura: 71.4%
+```
+
 ## Tasks
 
 ### reportTest
@@ -117,6 +152,11 @@ This task will be executed automatically after `test` task's failure by default,
 
 Print JaCoCo coverage report.
 This task will be executed automatically after `jacocoTestReport` task by default, so you don't need to call it.
+
+### reportCobertura
+
+Print Cobertura coverage report.
+This task will be executed automatically after `cobertura` task by default, so you don't need to call it.
 
 ## Configurations
 
@@ -187,6 +227,46 @@ consoleReporter {
         // Default is 70.
         thresholdWarning 70
     }
+
+    cobertura {
+        // Set this property to false if you don't need Cobertura report.
+        // Default is true.
+        // Even if this is true, reporting will not work
+        // without applying stevesaliman/gradle-cobertura-plugin plugin.
+        enabled true
+
+        // Set this property to false if you want to see console report always.
+        onlyWhenCoberturaTaskExecuted true
+
+        // Set this property to false if you want to see console report
+        // just after each project's cobertura task.
+        // If set to true, all reports will be shown at the end of builds.
+        // Default is true.
+        reportAfterBuildFinished true
+
+        // Set this property to your custom cobertura task name, if you need.
+        // Default is 'cobertura'.
+        coberturaTaskName 'cobertura'
+
+        // Set this property to your Cobertura report XML file.
+        // Default is null, which means
+        // ${project.buildDir}/reports/cobertura/coverage.xml
+        // will be parsed.
+        reportFile
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is greater than or equals to this value,
+        // the coverage will be shown with green color.
+        // Default is 90.
+        thresholdFine 90
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is greater than or equals to this value,
+        // the coverage will be shown with yellow color.
+        // (When the coverage is less than this value, result will be red.)
+        // Default is 70.
+        thresholdWarning 70
+    }
 }
 
 // You need to set xml.enabled to true
@@ -195,6 +275,13 @@ jacocoTestReport {
     reports {
         xml.enabled true
     }
+}
+
+
+// You need to add 'xml' to coverageFormats option
+// if you want to print report for Cobertura.
+cobertura {
+    coverageFormats = ['html', 'xml']
 }
 ```
 
