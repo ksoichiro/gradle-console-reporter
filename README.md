@@ -196,7 +196,7 @@ consoleReporter {
         enabled true
 
         // Set this property to false if you want to see console report always.
-        onlyWhenJacocoTaskExecuted true
+        onlyWhenCoverageTaskExecuted true
 
         // Set this property to false if you want to see console report
         // just after each project's jacocoTestReport task.
@@ -206,7 +206,7 @@ consoleReporter {
 
         // Set this property to your custom JacocoReport type task name, if you need.
         // Default is 'jacocoTestReport'.
-        jacocoTaskName 'jacocoTestReport'
+        coverageTaskName 'jacocoTestReport'
 
         // Set this property to your JaCoCo report XML file.
         // Default is null, which means
@@ -236,7 +236,7 @@ consoleReporter {
         enabled true
 
         // Set this property to false if you want to see console report always.
-        onlyWhenCoberturaTaskExecuted true
+        onlyWhenCoverageTaskExecuted true
 
         // Set this property to false if you want to see console report
         // just after each project's cobertura task.
@@ -246,7 +246,7 @@ consoleReporter {
 
         // Set this property to your custom cobertura task name, if you need.
         // Default is 'cobertura'.
-        coberturaTaskName 'cobertura'
+        coverageTaskName 'cobertura'
 
         // Set this property to your Cobertura report XML file.
         // Default is null, which means
