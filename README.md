@@ -17,7 +17,7 @@ Just apply the plugin:
 
 ```gradle
 plugins {
-    id 'com.github.ksoichiro.console.reporter' version '0.2.0'
+    id 'com.github.ksoichiro.console.reporter' version '0.3.0'
 }
 ```
 
@@ -150,12 +150,12 @@ This task will be executed automatically after `test` task's failure by default,
 
 ### reportJacoco
 
-Print JaCoCo coverage report.
+Print JaCoCo coverage report.  
 This task will be executed automatically after `jacocoTestReport` task by default, so you don't need to call it.
 
 ### reportCobertura
 
-Print Cobertura coverage report.
+Print Cobertura coverage report.  
 This task will be executed automatically after `cobertura` task by default, so you don't need to call it.
 
 ## Configurations
