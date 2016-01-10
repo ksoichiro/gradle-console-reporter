@@ -5,13 +5,14 @@ import com.github.ksoichiro.console.reporter.report.jacoco.JacocoCounterType
 import groovy.transform.ToString
 
 @ToString
-class JacocoReport implements Report {
+class JacocoReport implements CoverageReport {
     List<JacocoCounter> counters
 
     JacocoReport() {
         counters = []
     }
 
+    @Override
     public float getC0Coverage() {
         JacocoCounter instructionCounter = counters.find { it.type == JacocoCounterType.INSTRUCTION }
         if (!instructionCounter) {

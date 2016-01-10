@@ -2,16 +2,13 @@ package com.github.ksoichiro.console.reporter
 
 import com.github.ksoichiro.console.reporter.config.JacocoReportConfig
 import com.github.ksoichiro.console.reporter.writer.JacocoReportWriter
-import org.fusesource.jansi.Ansi
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static org.fusesource.jansi.Ansi.Color.GREEN
-import static org.fusesource.jansi.Ansi.Color.RED
-import static org.fusesource.jansi.Ansi.Color.YELLOW
+import static org.fusesource.jansi.Ansi.Color.*
 
 class ReportJacocoSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
@@ -201,11 +198,13 @@ class ReportJacocoSpec extends Specification {
     def styleForQuality() {
         setup:
         JacocoReportConfig config = new JacocoReportConfig()
+        def writer = new JacocoReportWriter()
+        writer.config = config
 
         when:
         config.thresholdFine = tf
         config.thresholdWarning = tw
-        def actualColor = JacocoReportWriter.styleForQuality(c0coverage, config)
+        def actualColor = writer.styleForQuality(c0coverage)
 
         then:
         expectedColor == actualColor

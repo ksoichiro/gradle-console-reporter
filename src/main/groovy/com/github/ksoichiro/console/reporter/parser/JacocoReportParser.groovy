@@ -10,8 +10,8 @@ class JacocoReportParser implements ReportParser<JacocoReport, JacocoReportConfi
     @Override
     JacocoReport parse(Project project, JacocoReportConfig config) {
         JacocoReport report = new JacocoReport()
-        if (config.onlyWhenJacocoTaskExecuted
-            && !project.gradle.taskGraph.hasTask("${project.path == ':' ? '' : project.path}:${config.jacocoTaskName}")) {
+        if (config.onlyWhenCoverageTaskExecuted
+            && !project.gradle.taskGraph.hasTask("${project.path == ':' ? '' : project.path}:${config.coverageTaskName}")) {
             return report
         }
         def testReportFile = config.reportFile ?: project.file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")

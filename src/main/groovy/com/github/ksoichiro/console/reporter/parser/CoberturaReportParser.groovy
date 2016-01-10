@@ -8,8 +8,8 @@ class CoberturaReportParser implements ReportParser<CoberturaReport, CoberturaRe
     @Override
     CoberturaReport parse(Project project, CoberturaReportConfig config) {
         CoberturaReport report = new CoberturaReport()
-        if (config.onlyWhenCoberturaTaskExecuted
-            && !project.gradle.taskGraph.hasTask("${project.path == ':' ? '' : project.path}:${config.coberturaTaskName}")) {
+        if (config.onlyWhenCoverageTaskExecuted
+            && !project.gradle.taskGraph.hasTask("${project.path == ':' ? '' : project.path}:${config.coverageTaskName}")) {
             return report
         }
         def testReportFile = config.reportFile ?: project.file("${project.buildDir}/reports/cobertura/coverage.xml")

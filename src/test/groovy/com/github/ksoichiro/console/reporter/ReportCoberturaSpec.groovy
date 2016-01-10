@@ -166,11 +166,13 @@ class ReportCoberturaSpec extends Specification {
     def styleForQuality() {
         setup:
         CoberturaReportConfig config = new CoberturaReportConfig()
+        def writer = new CoberturaReportWriter()
+        writer.config = config
 
         when:
         config.thresholdFine = tf
         config.thresholdWarning = tw
-        def actualColor = CoberturaReportWriter.styleForQuality(c0coverage, config)
+        def actualColor = writer.styleForQuality(c0coverage)
 
         then:
         expectedColor == actualColor

@@ -17,7 +17,7 @@ class ReportCoberturaTask extends DefaultTask {
             extension = project.extensions."${ConsoleReporterExtension.NAME}"
 
             project.gradle.taskGraph.afterTask { Task task, TaskState state ->
-                if (task.name == extension.cobertura.coberturaTaskName && task.project == project) {
+                if (task.name == extension.cobertura.coverageTaskName && task.project == project) {
                     execute()
                 }
             }
