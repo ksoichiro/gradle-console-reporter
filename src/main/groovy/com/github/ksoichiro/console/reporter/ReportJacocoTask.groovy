@@ -18,9 +18,12 @@ class ReportJacocoTask extends DefaultTask {
 
             if (extension.jacoco.autoconfigureCoverageConfig) {
                 // Enable XML report carefully and silently
-                def jacocoExtension = project.extensions.findByName('jacocoTestReport')
-                if (jacocoExtension && jacocoExtension.reports?.xml) {
-                    jacocoExtension.reports?.xml?.enabled = true
+                if (project.plugins.hasPlugin('jacoco')) {
+                    // jacocoTestReport is not an extension
+                    def jacocoExtension = project.jacocoTestReport
+                    if (jacocoExtension && jacocoExtension.reports?.xml != null) {
+                        jacocoExtension.reports.xml.enabled = true
+                    }
                 }
             }
 
