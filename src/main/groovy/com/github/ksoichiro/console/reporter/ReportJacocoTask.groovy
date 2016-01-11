@@ -16,6 +16,14 @@ class ReportJacocoTask extends DefaultTask {
         project.afterEvaluate {
             extension = project.extensions."${ConsoleReporterExtension.NAME}"
 
+            if (extension.jacoco.autoconfigureCoverageConfig) {
+                // Enable XML report carefully and silently
+                def jacocoExtension = project.extensions.findByName('jacocoTestReport')
+                if (jacocoExtension && jacocoExtension.reports?.xml) {
+                    jacocoExtension.reports?.xml?.enabled = true
+                }
+            }
+
             project.gradle.taskGraph.afterTask { Task task, TaskState state ->
                 if (task instanceof org.gradle.testing.jacoco.tasks.JacocoReport && task.project == project) {
                     execute()

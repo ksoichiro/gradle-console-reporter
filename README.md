@@ -111,18 +111,7 @@ See [configurations](#configurations) section for details.
 ### JaCoCo coverage report
 
 If you're using JaCoCo gradle plugin,
-please confirm that `xml` format is enabled.
-
-```gradle
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
-```
-
-Then just run `jacocoTestReport` task.  
-You can see the coverage at the end of builds:
+you can see the coverage at the end of builds:
 
 ```console
 $ ./gradlew jacocoTestReport
@@ -147,16 +136,7 @@ project2-with-long-name: 44.4%
 ### Cobertura coverage report
 
 If you're using [stevesaliman/gradle-cobertura-plugin](https://github.com/stevesaliman/gradle-cobertura-plugin),
-please confirm that `xml` format is enabled.
-
-```gradle
-cobertura {
-    coverageFormats = ['html', 'xml']
-}
-```
-
-Then run `cobertura` task.  
-You can see the coverage at the end of builds:
+you can see the coverage at the end of builds:
 
 ```console
 $ ./gradlew cobertura
@@ -260,6 +240,13 @@ consoleReporter {
         // If you set this to true, you should also set thresholdError property.
         failIfLessThanThresholdError false
 
+        // Set this property to false if you don't like this plugin automatically changing some
+        // property of jacoco plugin.
+        // If this is set to true, the plugin will set some properties of jacoco plugin
+        // to calculate coverage.
+        // Default is true.
+        autoconfigureCoverageConfig true
+
         // Set this property to your custom JacocoReport type task name, if you need.
         // Default is 'jacocoTestReport'.
         coverageTaskName 'jacocoTestReport'
@@ -318,6 +305,13 @@ consoleReporter {
         // If you set this to true, you should also set thresholdError property.
         failIfLessThanThresholdError false
 
+        // Set this property to false if you don't like this plugin automatically changing some
+        // property of cobertura plugin.
+        // If this is set to true, the plugin will set some properties of cobertura plugin
+        // to calculate coverage.
+        // Default is true.
+        autoconfigureCoverageConfig true
+
         // Set this property to your custom cobertura task name, if you need.
         // Default is 'cobertura'.
         // If your coverage report is generated after build
@@ -356,21 +350,6 @@ consoleReporter {
         // when you use 'failIfLessThanThresholdError' feature.
         brokenCoverageErrorMessage = "Coverage has fallen below the threshold in some projects."
     }
-}
-
-// You need to set xml.enabled to true
-// if you want to print report for JaCoCo.
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
-
-
-// You need to add 'xml' to coverageFormats option
-// if you want to print report for Cobertura.
-cobertura {
-    coverageFormats = ['html', 'xml']
 }
 ```
 

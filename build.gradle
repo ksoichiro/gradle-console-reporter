@@ -61,10 +61,6 @@ test {
     }
 }
 
-cobertura {
-    coverageFormats = ['html', 'xml']
-}
-
 idea.module.excludeDirs += file('.repo')
 fileTree(dir: "samples").visit { details ->
     if (details.name in ['.gradle', 'build']) {

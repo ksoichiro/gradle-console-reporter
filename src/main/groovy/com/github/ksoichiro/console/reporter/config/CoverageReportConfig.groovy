@@ -7,6 +7,7 @@ abstract class CoverageReportConfig<R extends CoverageReport> implements ReportC
     boolean onlyWhenCoverageTaskExecuted = true
     boolean reportAfterBuildFinished = true
     boolean failIfLessThanThresholdError = false
+    boolean autoconfigureCoverageConfig = true
     String coverageTaskName
     File reportFile
     int thresholdFine = 90

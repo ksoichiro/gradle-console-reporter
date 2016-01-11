@@ -16,6 +16,17 @@ class ReportCoberturaTask extends DefaultTask {
         project.afterEvaluate {
             extension = project.extensions."${ConsoleReporterExtension.NAME}"
 
+            if (extension.cobertura.autoconfigureCoverageConfig) {
+                // Enable XML report carefully and silently
+                def coberturaExtension = project.extensions.findByName('cobertura')
+                if (coberturaExtension) {
+                    Set formats = coberturaExtension.coverageFormats
+                    if (formats && !formats.contains('xml')) {
+                        coberturaExtension.coverageFormats += 'xml'
+                    }
+                }
+            }
+
             project.gradle.taskGraph.afterTask { Task task, TaskState state ->
                 if (task.name == extension.cobertura.coverageTaskName && task.project == project) {
                     execute()

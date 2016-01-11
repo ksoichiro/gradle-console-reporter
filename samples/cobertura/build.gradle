@@ -36,7 +36,3 @@ consoleReporter {
         thresholdFine 50
     }
 }
-
-cobertura {
-    coverageFormats = ['html', 'xml']
-}

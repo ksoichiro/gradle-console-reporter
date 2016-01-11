@@ -32,9 +32,3 @@ consoleReporter {
         thresholdFine 50
     }
 }
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
