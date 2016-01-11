@@ -37,7 +37,7 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
         if (config.failIfLessThanThresholdError) {
             if (report.c0Coverage < config.thresholdError) {
                 project.gradle.buildFinished {
-                    throw new GradleException("Coverage has fallen below the threshold in some projects.")
+                    throw new GradleException(config.brokenCoverageErrorMessage)
                 }
             }
         }

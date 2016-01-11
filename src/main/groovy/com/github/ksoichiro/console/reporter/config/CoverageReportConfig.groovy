@@ -12,6 +12,7 @@ abstract class CoverageReportConfig<R extends CoverageReport> implements ReportC
     int thresholdFine = 90
     int thresholdWarning = 70
     int thresholdError = 0
+    String brokenCoverageErrorMessage = "Coverage has fallen below the threshold in some projects."
 
     def methodMissing(String name, args) {
         this."$name" = args[0]
