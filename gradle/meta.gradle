@@ -1,6 +1,6 @@
 ext {
     meta = [:]
-    meta.versionName = '0.3.1-SNAPSHOT'
+    meta.versionName = '0.3.1'
     meta.group = 'com.github.ksoichiro'
     meta.pomArtifactId = 'gradle-console-reporter'
     meta.javaCompatibility = 1.6
