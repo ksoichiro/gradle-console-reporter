@@ -9,17 +9,42 @@
 This plugin will aggregate test reports and show them to console.  
 It's useful when you use CI services that don't save artifacts.
 
-Currently, JUnit test report, JaCoCo coverage report and Cobertura coverage report is available.
+![Demo](samples/images/demo1.png)
+
+## Available reports
+
+* JUnit test report
+* JaCoCo coverage report
+* Cobertura coverage report
 
 ## Usage
 
-Just apply the plugin:
+### Getting started
+
+Just apply the plugin in your build.gradle.
 
 ```gradle
 plugins {
     id 'com.github.ksoichiro.console.reporter' version '0.3.0'
 }
 ```
+
+Or
+
+```gradle
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.ksoichiro:gradle-console-reporter:0.3.0'
+    }
+}
+
+apply plugin: 'com.github.ksoichiro.console.reporter'
+```
+
+### Test report
 
 When your tests fail, the plugin would print test failure details to the console.
 
@@ -83,8 +108,21 @@ testsuite com.example.BTest:
 You can suppress stacktrace by configuring the plugin.  
 See [configurations](#configurations) section for details.
 
-If you're using JaCoCo gradle plugin, you can see the coverage
-at the end of builds:
+### JaCoCo coverage report
+
+If you're using JaCoCo gradle plugin,
+please confirm that `xml` format is enabled.
+
+```gradle
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+```
+
+Then just run `jacocoTestReport` task.  
+You can see the coverage at the end of builds:
 
 ```console
 $ ./gradlew jacocoTestReport
@@ -106,8 +144,19 @@ project1:                72.2%
 project2-with-long-name: 44.4%
 ```
 
-If you're using gradle-cobertura-plugin, you can see the coverage
-at the end of builds:
+### Cobertura coverage report
+
+If you're using [stevesaliman/gradle-cobertura-plugin](https://github.com/stevesaliman/gradle-cobertura-plugin),
+please confirm that `xml` format is enabled.
+
+```gradle
+cobertura {
+    coverageFormats = ['html', 'xml']
+}
+```
+
+Then run `cobertura` task.  
+You can see the coverage at the end of builds:
 
 ```console
 $ ./gradlew cobertura
@@ -246,6 +295,10 @@ consoleReporter {
 
         // Set this property to your custom cobertura task name, if you need.
         // Default is 'cobertura'.
+        // If your coverage report is generated after build
+        // but you always see '0.0%' by this plugin,
+        // you might have to change this property
+        // to 'generateCoberturaReport'.
         coverageTaskName 'cobertura'
 
         // Set this property to your Cobertura report XML file.
