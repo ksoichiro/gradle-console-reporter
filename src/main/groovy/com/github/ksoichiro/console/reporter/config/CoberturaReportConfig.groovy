@@ -4,6 +4,6 @@ import com.github.ksoichiro.console.reporter.report.CoberturaReport
 
 class CoberturaReportConfig extends CoverageReportConfig<CoberturaReport> {
     CoberturaReportConfig() {
-        coverageTaskName = 'cobertura'
+        coverageTaskName = 'generateCoberturaReport'
     }
 }

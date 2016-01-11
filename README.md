@@ -313,12 +313,8 @@ consoleReporter {
         autoconfigureCoverageConfig true
 
         // Set this property to your custom cobertura task name, if you need.
-        // Default is 'cobertura'.
-        // If your coverage report is generated after build
-        // but you always see '0.0%' by this plugin,
-        // you might have to change this property
-        // to 'generateCoberturaReport'.
-        coverageTaskName 'cobertura'
+        // Default is 'generateCoberturaReport'.
+        coverageTaskName 'generateCoberturaReport'
 
         // Set this property to your Cobertura report XML file.
         // Default is null, which means
