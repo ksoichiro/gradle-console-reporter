@@ -6,10 +6,12 @@ abstract class CoverageReportConfig<R extends CoverageReport> implements ReportC
     boolean enabled = true
     boolean onlyWhenCoverageTaskExecuted = true
     boolean reportAfterBuildFinished = true
+    boolean failIfLessThanThresholdError = false
     String coverageTaskName
     File reportFile
     int thresholdFine = 90
     int thresholdWarning = 70
+    int thresholdError = 0
 
     def methodMissing(String name, args) {
         this."$name" = args[0]

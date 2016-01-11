@@ -253,6 +253,13 @@ consoleReporter {
         // Default is true.
         reportAfterBuildFinished true
 
+        // Set this property to true if you want to treat a lack of the minimum coverage as an build error.
+        // This property sees thresholdError property, and if the coverage has fallen below this value
+        // the plugin will throw an exception to cause a build error.
+        // Default is false.
+        // If you set this to true, you should also set thresholdError property.
+        failIfLessThanThresholdError false
+
         // Set this property to your custom JacocoReport type task name, if you need.
         // Default is 'jacocoTestReport'.
         coverageTaskName 'jacocoTestReport'
@@ -275,6 +282,13 @@ consoleReporter {
         // (When the coverage is less than this value, result will be red.)
         // Default is 70.
         thresholdWarning 70
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is less than this value and
+        // failIfLessThanThresholdError property is set to true,
+        // the build will fail.
+        // Default is 0.
+        thresholdError 0
     }
 
     cobertura {
@@ -292,6 +306,13 @@ consoleReporter {
         // If set to true, all reports will be shown at the end of builds.
         // Default is true.
         reportAfterBuildFinished true
+
+        // Set this property to true if you want to treat a lack of the minimum coverage as an build error.
+        // This property sees thresholdError property, and if the coverage has fallen below this value
+        // the plugin will throw an exception to cause a build error.
+        // Default is false.
+        // If you set this to true, you should also set thresholdError property.
+        failIfLessThanThresholdError false
 
         // Set this property to your custom cobertura task name, if you need.
         // Default is 'cobertura'.
@@ -319,6 +340,13 @@ consoleReporter {
         // (When the coverage is less than this value, result will be red.)
         // Default is 70.
         thresholdWarning 70
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is less than this value and
+        // failIfLessThanThresholdError property is set to true,
+        // the build will fail.
+        // Default is 0.
+        thresholdError 0
     }
 }
 

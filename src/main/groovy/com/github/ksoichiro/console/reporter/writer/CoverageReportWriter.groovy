@@ -4,6 +4,7 @@ import com.github.ksoichiro.console.reporter.config.CoverageReportConfig
 import com.github.ksoichiro.console.reporter.report.CoverageReport
 import org.fusesource.jansi.Ansi
 import org.fusesource.jansi.AnsiConsole
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 
 import static org.fusesource.jansi.Ansi.Color.*
@@ -32,6 +33,13 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
             }
         } else {
             println toAnsi(String.format("C0 Coverage: %.1f%%", report.c0Coverage))
+        }
+        if (config.failIfLessThanThresholdError) {
+            if (report.c0Coverage < config.thresholdError) {
+                project.gradle.buildFinished {
+                    throw new GradleException("Coverage has fallen below the threshold in some projects.")
+                }
+            }
         }
     }
 
