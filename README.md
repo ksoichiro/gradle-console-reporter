@@ -9,7 +9,7 @@
 This plugin will aggregate test reports and show them to console.  
 It's useful when you use CI services that don't save artifacts.
 
-![Demo](samples/images/demo1.png)
+<img src="samples/images/demo1.png" width="400">
 
 ## Available reports
 
