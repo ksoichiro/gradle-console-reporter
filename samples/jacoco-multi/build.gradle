@@ -30,4 +30,6 @@ subprojects {
             stacktraceEnabled true
         }
     }
+
+    check.dependsOn('jacocoTestReport')
 }

@@ -32,3 +32,5 @@ consoleReporter {
         thresholdFine 50
     }
 }
+
+check.dependsOn('jacocoTestReport')

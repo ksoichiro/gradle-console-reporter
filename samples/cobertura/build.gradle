@@ -36,3 +36,5 @@ consoleReporter {
         thresholdFine 50
     }
 }
+
+check.dependsOn('cobertura')
