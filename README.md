@@ -279,7 +279,7 @@ consoleReporter {
 
         // Set this property if you want to customize build error message
         // when you use 'failIfLessThanThresholdError' feature.
-        brokenCoverageErrorMessage = "Coverage has fallen below the threshold in some projects."
+        brokenCoverageErrorMessage "Coverage has fallen below the threshold in some projects."
     }
 
     cobertura {
@@ -344,7 +344,7 @@ consoleReporter {
 
         // Set this property if you want to customize build error message
         // when you use 'failIfLessThanThresholdError' feature.
-        brokenCoverageErrorMessage = "Coverage has fallen below the threshold in some projects."
+        brokenCoverageErrorMessage "Coverage has fallen below the threshold in some projects."
     }
 }
 ```
