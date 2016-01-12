@@ -45,7 +45,7 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
 
     def headerForFirstSubproject() {
         if (project.is(project.rootProject)
-            || 0 == project.rootProject.subprojects.findIndexOf { it.name == project.name }) {
+            || 0 == projectsIncludedInTaskGraph().findIndexOf { it.name == project.name }) {
             return ["", "Coverage summary:"]
         }
         null
@@ -76,7 +76,7 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
             "${project.name}:"
         } else {
             int maxLength = 0
-            project.rootProject.subprojects.each { p ->
+            projectsIncludedInTaskGraph().each { p ->
                 if (maxLength < p.name.length())
                     maxLength = p.name.length()
             }
@@ -84,5 +84,9 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
             (maxLength - project.name.length()).times { padding += " " }
             "${project.name}:${padding}"
         }
+    }
+
+    def projectsIncludedInTaskGraph() {
+        project.gradle.taskGraph.allTasks.collect { it.project }.unique().sort()
     }
 }
