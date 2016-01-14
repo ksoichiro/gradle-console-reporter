@@ -15,7 +15,6 @@ public class DTest {
 
     @Test
     public void greet() {
-        System.out.println("debug log in test");
-        assertEquals("Hello", instance.greet());
+        System.out.println("To show low coverage, this test does nothing.");
     }
 }

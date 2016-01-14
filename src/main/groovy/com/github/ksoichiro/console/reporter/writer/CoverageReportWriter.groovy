@@ -21,7 +21,7 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
         this.report = report
         this.config = config
         if (config.reportAfterBuildFinished) {
-            def result = toAnsi(String.format("${adjustedProjectName()} %.1f%%", report.c0Coverage))
+            def result = toAnsi("${adjustedProjectName()} ${rightAlignedCoverage(report.c0Coverage)}")
             def headers = headerForFirstSubproject()
             project.gradle.buildFinished {
                 if (headers) {
@@ -32,7 +32,7 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
                 println result
             }
         } else {
-            println toAnsi(String.format("C0 Coverage: %.1f%%", report.c0Coverage))
+            println toAnsi("C0 Coverage: ${rightAlignedCoverage(report.c0Coverage)}")
         }
         if (config.failIfLessThanThresholdError) {
             if (report.c0Coverage < config.thresholdError) {
@@ -88,5 +88,9 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
 
     def projectsIncludedInTaskGraph() {
         project.gradle.taskGraph.allTasks.collect { it.project }.unique().sort()
+    }
+
+    static def rightAlignedCoverage(float coverage) {
+        "${sprintf("%.1f", coverage).padLeft("100.0".length(), ' ')}%"
     }
 }
