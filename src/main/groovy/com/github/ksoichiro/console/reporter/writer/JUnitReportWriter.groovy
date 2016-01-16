@@ -51,32 +51,36 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                                 (it =~ /\(.*:([0-9]*)\)$/).each { all, ln ->
                                     lineNumber = ln.toInteger()
                                 }
-                                String srcFilePath = null
-                                project.sourceSets.each { type ->
-                                    def tmp = type.allSource.find {
-                                        (it as String).replaceAll("/", ".").replaceAll("\\\\", ".").contains(testcase.classname)
-                                    }
-                                    if (tmp) {
-                                        srcFilePath = tmp
-                                    }
-                                }
                                 if (-1 < lineNumber) {
-                                    def lines = new File(srcFilePath).readLines()
-                                    def beforeLines = 1
-                                    def afterLines = 1
-                                    def first = (1 <= lineNumber - beforeLines) ? lineNumber - beforeLines : 1
-                                    def last = (lineNumber + afterLines <= lines.size()) ? lineNumber + afterLines : lines.size()
-                                    printlnWithIndent(3, "")
-                                    (first .. last).each { ln ->
-                                        def indicator = " "
-                                        def srcLine = lines.get(ln - 1)
-                                        if (ln == lineNumber) {
-                                            indicator = ">"
-                                            srcLine = toMagenta(srcLine)
+                                    // Remove inner class name (e.g. @Enclosed test)
+                                    String targetClassname = testcase.classname.replaceAll('\\$.*', "")
+                                    String srcFilePath = null
+                                    project.sourceSets.each { type ->
+                                        def tmp = type.allSource.find {
+                                            (it as String).replaceAll("/", ".").replaceAll("\\\\", ".").contains(targetClassname)
                                         }
-                                        printlnWithIndent(3, "${ln}: ${indicator} ${srcLine}")
+                                        if (tmp) {
+                                            srcFilePath = tmp
+                                        }
                                     }
-                                    printlnWithIndent(3, "")
+                                    if (srcFilePath) {
+                                        def lines = new File(srcFilePath).readLines()
+                                        def beforeLines = 1
+                                        def afterLines = 1
+                                        def first = (1 <= lineNumber - beforeLines) ? lineNumber - beforeLines : 1
+                                        def last = (lineNumber + afterLines <= lines.size()) ? lineNumber + afterLines : lines.size()
+                                        printlnWithIndent(3, "")
+                                        (first .. last).each { ln ->
+                                            def indicator = " "
+                                            def srcLine = lines.get(ln - 1)
+                                            if (ln == lineNumber) {
+                                                indicator = ">"
+                                                srcLine = toMagenta(srcLine)
+                                            }
+                                            printlnWithIndent(3, "${ln}: ${indicator} ${srcLine}")
+                                        }
+                                        printlnWithIndent(3, "")
+                                    }
                                 }
                             }
                         }
