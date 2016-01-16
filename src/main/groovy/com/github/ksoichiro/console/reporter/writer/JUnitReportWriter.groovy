@@ -49,20 +49,22 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
     }
 
     def writeSystemOut(JUnitTestsuite ts) {
-        if (config.stdoutEnabled && ts.systemOut) {
-            printlnWithIndent(1, "stdout:")
-            ts.systemOut.eachLine {
-                printlnWithIndent(2, toGray(it))
-            }
+        if (!config.stdoutEnabled || !ts.systemOut) {
+            return
+        }
+        printlnWithIndent(1, "stdout:")
+        ts.systemOut.eachLine {
+            printlnWithIndent(2, toGray(it))
         }
     }
 
     def writeSystemErr(JUnitTestsuite ts) {
-        if (config.stderrEnabled && ts.systemErr) {
-            printlnWithIndent(1, "stderr:")
-            ts.systemErr.eachLine {
-                printlnWithIndent(2, toGray(it))
-            }
+        if (!config.stderrEnabled || !ts.systemErr) {
+            return
+        }
+        printlnWithIndent(1, "stderr:")
+        ts.systemErr.eachLine {
+            printlnWithIndent(2, toGray(it))
         }
     }
 
@@ -100,30 +102,21 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
     }
 
     def writeTestcaseWithoutStacktrace(JUnitTestcase testcase) {
-        // Show message without stacktrace
         def message = testcase.failure.message
         if (message == null || message.isEmpty()) {
             return
         }
-        // Remove '[' and ']'
-        (message =~ /^\[(.*)]$/).each { all, containedMessage ->
-            message = containedMessage
-        }
+        message = stripBrackets(message)
         printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${message}")
     }
 
     def printPartialSource(String classname, String stacktraceLine) {
-        int lineNumber = -1
-        // Extract line number: at com.example.CTest.greet(CTest.java:18)
-        (stacktraceLine =~ /\(.*:([0-9]*)\)$/).each { all, ln ->
-            lineNumber = ln.toInteger()
-        }
+        int lineNumber = getLineNumberFromStacktraceLine(stacktraceLine)
         if (lineNumber == -1) {
             // Not found (might be a native method or unknown source)
             return
         }
-        // Remove inner class name (e.g. @Enclosed test)
-        String targetClassname = classname.replaceAll('\\$.*', "")
+        String targetClassname = getExternalClassname(classname)
         String srcFilePath = null
         project.sourceSets.each { type ->
             def tmp = type.allSource.find {
@@ -178,10 +171,6 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
         }
     }
 
-    static boolean shouldHighlight(String line, String expr) {
-        line.replace('\t', '').contains(expr)
-    }
-
     def highlightStacktrace(String line, String expr) {
         def edited = line.replace('\t', '')
         if (colorEnabled) {
@@ -193,6 +182,33 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
         } else {
             edited
         }
+    }
+
+    /** Extract line number: at com.example.CTest.greet(CTest.java:18) */
+    static def getLineNumberFromStacktraceLine(String stacktraceLine) {
+        def lineNumber = -1
+        (stacktraceLine =~ /\(.*:([0-9]*)\)$/).each { all, ln ->
+            lineNumber = ln.toInteger()
+        }
+        lineNumber
+    }
+
+    /** Remove inner class name (e.g. &#064;Enclosed test) */
+    static def getExternalClassname(String classname) {
+        classname.replaceAll('\\$.*', "")
+    }
+
+    /** Remove '[' and ']' from input */
+    static def stripBrackets(def input) {
+        def output = input
+        (output =~ /^\[(.*)]$/).each { all, contained ->
+            output = contained
+        }
+        output
+    }
+
+    static boolean shouldHighlight(String line, String expr) {
+        line.replace('\t', '').contains(expr)
     }
 
     static void printlnWithIndent(int level, def line) {
