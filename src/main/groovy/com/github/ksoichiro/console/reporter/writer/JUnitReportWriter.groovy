@@ -10,9 +10,13 @@ import static org.fusesource.jansi.Ansi.ansi
 
 class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
     public static final String INDENT = "  "
+    Project project
+    boolean colorEnabled
 
     @Override
     void write(Project project, JUnitReport report, JUnitReportConfig config) {
+        this.project = project
+        this.colorEnabled = true
         AnsiConsole.systemInstall()
         report.testsuites.findAll { it.testcases.any { it.failed} }.eachWithIndex { ts, i ->
             // Insert newline between test suites
@@ -51,7 +55,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                                     if (limitToSuppress < 0) {
                                         limitToSuppress = 1 + 5
                                     }
-                                    printPartialSource(project, testcase.classname, it)
+                                    printPartialSource(testcase.classname, it)
                                 }
                                 if (0 < limitToSuppress) {
                                     limitToSuppress--
@@ -78,7 +82,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
         AnsiConsole.systemUninstall()
     }
 
-    static def printPartialSource(Project project, String classname, String stacktraceLine) {
+    def printPartialSource(String classname, String stacktraceLine) {
         int lineNumber = -1
         // Extract line number: at com.example.CTest.greet(CTest.java:18)
         (stacktraceLine =~ /\(.*:([0-9]*)\)$/).each { all, ln ->
@@ -119,28 +123,44 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
         }
     }
 
-    static Ansi toGray(def line) {
-        ansi().fgBright(Ansi.Color.BLACK).a(line).reset()
+    def toGray(def line) {
+        if (colorEnabled) {
+            ansi().fgBright(Ansi.Color.BLACK).a(line).reset()
+        } else {
+            line
+        }
     }
 
-    static Ansi toCyan(def line) {
-        ansi().fg(Ansi.Color.CYAN).a(line).reset()
+    def toCyan(def line) {
+        if (colorEnabled) {
+            ansi().fg(Ansi.Color.CYAN).a(line).reset()
+        } else {
+            line
+        }
     }
 
-    static Ansi toMagenta(def line) {
-        ansi().fg(Ansi.Color.MAGENTA).a(line).reset()
+    def toMagenta(def line) {
+        if (colorEnabled) {
+            ansi().fg(Ansi.Color.MAGENTA).a(line).reset()
+        } else {
+            line
+        }
     }
 
     static boolean shouldHighlight(String line, String expr) {
         line.replace('\t', '').contains(expr)
     }
 
-    static Ansi highlightStacktrace(String line, String expr) {
+    def highlightStacktrace(String line, String expr) {
         def edited = line.replace('\t', '')
-        if (shouldHighlight(line, expr)) {
-            ansi().fg(Ansi.Color.RED).a(edited).reset()
+        if (colorEnabled) {
+            if (shouldHighlight(line, expr)) {
+                ansi().fg(Ansi.Color.RED).a(edited).reset()
+            } else {
+                toGray(edited)
+            }
         } else {
-            toGray(edited)
+            edited
         }
     }
 
