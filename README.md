@@ -215,6 +215,10 @@ consoleReporter {
         // Set this property to false if you don't need stacktrace.
         // Default is true.
         stacktraceEnabled true
+
+        // Set this property to false if you don't need colorized output.
+        // Default is true.
+        colorEnabled true
     }
 
     jacoco {
@@ -280,6 +284,10 @@ consoleReporter {
         // Set this property if you want to customize build error message
         // when you use 'failIfLessThanThresholdError' feature.
         brokenCoverageErrorMessage "Coverage has fallen below the threshold in some projects."
+
+        // Set this property to false if you don't need colorized output.
+        // Default is true.
+        colorEnabled true
     }
 
     cobertura {
@@ -345,6 +353,10 @@ consoleReporter {
         // Set this property if you want to customize build error message
         // when you use 'failIfLessThanThresholdError' feature.
         brokenCoverageErrorMessage "Coverage has fallen below the threshold in some projects."
+
+        // Set this property to false if you don't need colorized output.
+        // Default is true.
+        colorEnabled true
     }
 }
 ```

@@ -12,6 +12,7 @@ import static org.fusesource.jansi.Ansi.ansi
 
 abstract class CoverageReportWriter<R extends CoverageReport, C extends CoverageReportConfig<R>> implements ReportWriter<R, C> {
     Project project
+    boolean colorEnabled
     R report
     C config
 
@@ -20,6 +21,7 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
         this.project = project
         this.report = report
         this.config = config
+        this.colorEnabled = config.colorEnabled
         if (config.reportAfterBuildFinished) {
             def result = toAnsi("${adjustedProjectName()} ${rightAlignedCoverage(report.c0Coverage)}")
             def headers = headerForFirstSubproject()
@@ -52,13 +54,17 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
     }
 
     def toAnsi(def message) {
-        AnsiConsole.systemInstall()
-        def result = ansi()
-            .fg(styleForQuality(report.c0Coverage))
-            .a(message)
-            .reset()
-        AnsiConsole.systemUninstall()
-        result
+        if (colorEnabled) {
+            AnsiConsole.systemInstall()
+            def result = ansi()
+                .fg(styleForQuality(report.c0Coverage))
+                .a(message)
+                .reset()
+            AnsiConsole.systemUninstall()
+            result
+        } else {
+            message
+        }
     }
 
     Ansi.Color styleForQuality(float c0Coverage) {

@@ -16,7 +16,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
     @Override
     void write(Project project, JUnitReport report, JUnitReportConfig config) {
         this.project = project
-        this.colorEnabled = true
+        this.colorEnabled = config.colorEnabled
         AnsiConsole.systemInstall()
         report.testsuites.findAll { it.testcases.any { it.failed} }.eachWithIndex { ts, i ->
             // Insert newline between test suites
