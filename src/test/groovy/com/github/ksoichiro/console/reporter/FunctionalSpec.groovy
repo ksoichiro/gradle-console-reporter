@@ -91,7 +91,7 @@ class FunctionalSpec extends Specification {
         def stdout = result.output
 
         then:
-        stdout.contains("testsuite com.example.ATest:")
+        stdout.contains("com.example.ATest:")
         TaskOutcome.FAILED == result.task(":test").getOutcome()
     }
 }
