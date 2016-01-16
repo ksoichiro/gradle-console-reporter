@@ -16,21 +16,12 @@ class ReportJacocoSpec extends Specification {
     @Rule
     public final TemporaryFolder testProjectDir = new TemporaryFolder()
     File rootDir
-    PrintStream savedPrintStream
-    PrintStream  printStream
 
     def setup() {
         rootDir = testProjectDir.root
         if (!rootDir.exists()) {
             rootDir.mkdir()
         }
-        savedPrintStream = System.out
-        printStream = Mock(PrintStream)
-        System.out = printStream
-    }
-
-    def cleanup() {
-        System.out = savedPrintStream
     }
 
     def apply() {
@@ -69,8 +60,6 @@ class ReportJacocoSpec extends Specification {
 
         then:
         notThrown(Exception)
-        // With jansi, this will cause error
-        //1 * printStream.println('C0 Coverage: 72.2%')
     }
 
     def executeTaskWithoutReport() {

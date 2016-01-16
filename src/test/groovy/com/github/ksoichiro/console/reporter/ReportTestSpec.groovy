@@ -12,21 +12,12 @@ class ReportTestSpec extends Specification {
     @Rule
     public final TemporaryFolder testProjectDir = new TemporaryFolder()
     File rootDir
-    PrintStream savedPrintStream
-    PrintStream  printStream
 
     def setup() {
         rootDir = testProjectDir.root
         if (!rootDir.exists()) {
             rootDir.mkdir()
         }
-        savedPrintStream = System.out
-        printStream = Mock(PrintStream)
-        System.out = printStream
-    }
-
-    def cleanup() {
-        System.out = savedPrintStream
     }
 
     def apply() {
@@ -63,13 +54,6 @@ class ReportTestSpec extends Specification {
 
         then:
         notThrown(Exception)
-        1 * printStream.println('testsuite com.example.ExampleTest:')
-        1 * printStream.println('  tests: 2, skipped: 0, failures: 1, errors: 0, time: 2.418')
-        1 * printStream.println('  stdout:')
-        1 * printStream.println('    Hello, world!')
-        1 * printStream.println('    Hello, Gradle!')
-        1 * printStream.println('  stderr:')
-        1 * printStream.println('    Warning!')
     }
 
     def executeTaskWithoutReport() {
@@ -105,9 +89,6 @@ class ReportTestSpec extends Specification {
 
         then:
         notThrown(Exception)
-        0 * printStream.println('  stdout:')
-        0 * printStream.println('  stderr:')
-        1 * printStream.println("  testcase com.github.ksoichiro.console.reporter.PluginTest > greet: org.junit.ComparisonFailure: expected:<Hello[!]> but was:<Hello[]>")
     }
 
     void writeSampleReport(File testReportDir) {
