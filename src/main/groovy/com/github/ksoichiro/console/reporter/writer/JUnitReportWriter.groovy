@@ -15,7 +15,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
     void write(Project project, JUnitReport report, JUnitReportConfig config) {
         AnsiConsole.systemInstall()
         report.testsuites.findAll { it.testcases.any { it.failed} }.each { ts ->
-            printlnWithIndent(0, "testsuite ${ts.name}:")
+            printlnWithIndent(0, "testsuite ${toCyan(ts.name)}:")
             if (config.summaryEnabled) {
                 printlnWithIndent(1, "tests: ${ts.tests}, skipped: ${ts.skipped}, failures: ${ts.failures}, errors: ${ts.errors}, time: ${ts.time}")
             }
