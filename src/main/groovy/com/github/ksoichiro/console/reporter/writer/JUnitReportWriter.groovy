@@ -38,7 +38,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             ts.testcases.findAll { it.failed }.each { testcase ->
                 if (config.stacktraceEnabled) {
                     if (testcase.failure.description != null && !testcase.failure.description.isEmpty()) {
-                        printlnWithIndent(1, "testcase ${testcase.classname} > ${testcase.name}: ${testcase.failure.description}")
+                        printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${testcase.failure.description}")
                     }
                 } else {
                     // Show message without stacktrace
@@ -48,7 +48,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                         (message =~ /^\[(.*)]$/).each { all, containedMessage ->
                             message = containedMessage
                         }
-                        printlnWithIndent(1, "testcase ${testcase.classname} > ${testcase.name}: ${message}")
+                        printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${message}")
                     }
                 }
             }
@@ -58,6 +58,14 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
 
     static Ansi toGray(def line) {
         ansi().fgBright(Ansi.Color.BLACK).a(line).reset()
+    }
+
+    static Ansi toCyan(def line) {
+        ansi().fg(Ansi.Color.CYAN).a(line).reset()
+    }
+
+    static Ansi toMagenta(def line) {
+        ansi().fg(Ansi.Color.MAGENTA).a(line).reset()
     }
 
     static void printlnWithIndent(int level, def line) {
