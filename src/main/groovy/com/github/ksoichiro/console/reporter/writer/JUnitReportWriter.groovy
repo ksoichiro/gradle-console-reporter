@@ -13,6 +13,7 @@ import static org.fusesource.jansi.Ansi.ansi
 class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
     public static final String INDENT = "  "
     Project project
+    Map<String, File> sourceMap
     JUnitReportConfig config
     boolean colorEnabled
 
@@ -116,20 +117,11 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             // Not found (might be a native method or unknown source)
             return
         }
-        String targetClassname = getExternalClassname(classname)
-        String srcFilePath = null
-        project.sourceSets.each { type ->
-            def tmp = type.allSource.find {
-                (it as String).replaceAll("/", ".").replaceAll("\\\\", ".").contains(targetClassname)
-            }
-            if (tmp) {
-                srcFilePath = tmp
-            }
-        }
-        if (!srcFilePath) {
+        File srcFile = findSourceFile(classname)
+        if (!srcFile) {
             return
         }
-        def lines = new File(srcFilePath).readLines()
+        def lines = srcFile.readLines()
         def beforeLines = 1
         def afterLines = 1
         def first = (1 <= lineNumber - beforeLines) ? lineNumber - beforeLines : 1
@@ -145,6 +137,25 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             printlnWithIndent(3, "${ln}: ${indicator} ${srcLine}")
         }
         printlnWithIndent(3, "")
+    }
+
+    def findSourceFile(String classname) {
+        collectSourceFiles()
+        String targetClassname = getExternalClassname(classname)
+        sourceMap.find { k, v ->
+            k.contains(targetClassname)
+        }?.value
+    }
+
+    def collectSourceFiles() {
+        if (sourceMap) {
+            return
+        }
+        sourceMap = project.sourceSets.collect {
+            it.allSource.asList()
+        }.flatten().collectEntries {
+            [(it.absolutePath as String).replaceAll("\\\\", "/").replaceAll("/", "."), it]
+        }
     }
 
     def toGray(def line) {
