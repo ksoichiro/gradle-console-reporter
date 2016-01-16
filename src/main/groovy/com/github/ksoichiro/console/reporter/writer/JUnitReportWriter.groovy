@@ -2,6 +2,8 @@ package com.github.ksoichiro.console.reporter.writer
 
 import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
 import com.github.ksoichiro.console.reporter.report.JUnitReport
+import com.github.ksoichiro.console.reporter.report.junit.JUnitTestcase
+import com.github.ksoichiro.console.reporter.report.junit.JUnitTestsuite
 import org.fusesource.jansi.Ansi
 import org.fusesource.jansi.AnsiConsole
 import org.gradle.api.Project
@@ -11,11 +13,13 @@ import static org.fusesource.jansi.Ansi.ansi
 class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
     public static final String INDENT = "  "
     Project project
+    JUnitReportConfig config
     boolean colorEnabled
 
     @Override
     void write(Project project, JUnitReport report, JUnitReportConfig config) {
         this.project = project
+        this.config = config
         this.colorEnabled = config.colorEnabled
         AnsiConsole.systemInstall()
         report.testsuites.findAll { it.testcases.any { it.failed} }.eachWithIndex { ts, i ->
@@ -23,63 +27,89 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             if (0 < i) {
                 println()
             }
-            printlnWithIndent(0, "testsuite ${toCyan(ts.name)}:")
-            if (config.summaryEnabled) {
-                printlnWithIndent(1, "tests: ${ts.tests}, skipped: ${ts.skipped}, failures: ${ts.failures}, errors: ${ts.errors}, time: ${ts.time}")
+            writeTestsuite(ts)
+        }
+        AnsiConsole.systemUninstall()
+    }
+
+    def writeTestsuite(JUnitTestsuite ts) {
+        printlnWithIndent(0, "testsuite ${toCyan(ts.name)}:")
+        writeSummary(ts)
+        writeSystemOut(ts)
+        writeSystemErr(ts)
+        ts.testcases.findAll { it.failed }.each { testcase ->
+            writeTestcase(testcase)
+        }
+    }
+
+    def writeSummary(JUnitTestsuite ts) {
+        if (config.summaryEnabled) {
+            printlnWithIndent(1, "tests: ${ts.tests}, skipped: ${ts.skipped}, failures: ${ts.failures}, errors: ${ts.errors}, time: ${ts.time}")
+        }
+    }
+
+    def writeSystemOut(JUnitTestsuite ts) {
+        if (config.stdoutEnabled && ts.systemOut) {
+            printlnWithIndent(1, "stdout:")
+            ts.systemOut.eachLine {
+                printlnWithIndent(2, toGray(it))
             }
-            if (config.stdoutEnabled) {
-                if (ts.systemOut) {
-                    printlnWithIndent(1, "stdout:")
-                    ts.systemOut.eachLine {
-                        printlnWithIndent(2, toGray(it))
+        }
+    }
+
+    def writeSystemErr(JUnitTestsuite ts) {
+        if (config.stderrEnabled && ts.systemErr) {
+            printlnWithIndent(1, "stderr:")
+            ts.systemErr.eachLine {
+                printlnWithIndent(2, toGray(it))
+            }
+        }
+    }
+
+    def writeTestcase(JUnitTestcase testcase) {
+        if (config.stacktraceEnabled) {
+            writeTestcaseWithStacktrace(testcase)
+        } else {
+            writeTestcaseWithoutStacktrace(testcase)
+        }
+    }
+
+    def writeTestcaseWithStacktrace(JUnitTestcase testcase) {
+        if (testcase.failure.description == null || testcase.failure.description.isEmpty()) {
+            return
+        }
+        printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${testcase.failure.exceptionMessage()}")
+        def limitToSuppress = -1
+        testcase.failure.exceptionStacktrace()?.each {
+            if (limitToSuppress != 0) {
+                printlnWithIndent(2, highlightStacktrace(it, testcase.classname))
+                if (shouldHighlight(it, testcase.classname)) {
+                    if (limitToSuppress < 0) {
+                        limitToSuppress = 1 + 5
                     }
+                    printPartialSource(testcase.classname, it)
                 }
-            }
-            if (config.stderrEnabled) {
-                if (ts.systemErr) {
-                    printlnWithIndent(1, "stderr:")
-                    ts.systemErr.eachLine {
-                        printlnWithIndent(2, toGray(it))
-                    }
-                }
-            }
-            ts.testcases.findAll { it.failed }.each { testcase ->
-                if (config.stacktraceEnabled) {
-                    if (testcase.failure.description != null && !testcase.failure.description.isEmpty()) {
-                        printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${testcase.failure.exceptionMessage()}")
-                        def limitToSuppress = -1
-                        testcase.failure.exceptionStacktrace()?.eachWithIndex { it, stIdx ->
-                            if (limitToSuppress != 0) {
-                                printlnWithIndent(2, highlightStacktrace(it, testcase.classname))
-                                if (shouldHighlight(it, testcase.classname)) {
-                                    if (limitToSuppress < 0) {
-                                        limitToSuppress = 1 + 5
-                                    }
-                                    printPartialSource(testcase.classname, it)
-                                }
-                                if (0 < limitToSuppress) {
-                                    limitToSuppress--
-                                    if (limitToSuppress == 0) {
-                                        printlnWithIndent(2, toGray("..."))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    // Show message without stacktrace
-                    def message = testcase.failure.message
-                    if (message != null && !message.isEmpty()) {
-                        // Remove '[' and ']'
-                        (message =~ /^\[(.*)]$/).each { all, containedMessage ->
-                            message = containedMessage
-                        }
-                        printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${message}")
+                if (0 < limitToSuppress) {
+                    limitToSuppress--
+                    if (limitToSuppress == 0) {
+                        printlnWithIndent(2, toGray("..."))
                     }
                 }
             }
         }
-        AnsiConsole.systemUninstall()
+    }
+
+    def writeTestcaseWithoutStacktrace(JUnitTestcase testcase) {
+        // Show message without stacktrace
+        def message = testcase.failure.message
+        if (message == null || message.isEmpty()) {
+            return
+        }
+        // Remove '[' and ']'
+        (message =~ /^\[(.*)]$/).each { all, containedMessage ->
+            message = containedMessage
+        }
+        printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${message}")
     }
 
     def printPartialSource(String classname, String stacktraceLine) {
@@ -103,24 +133,25 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                 srcFilePath = tmp
             }
         }
-        if (srcFilePath) {
-            def lines = new File(srcFilePath).readLines()
-            def beforeLines = 1
-            def afterLines = 1
-            def first = (1 <= lineNumber - beforeLines) ? lineNumber - beforeLines : 1
-            def last = (lineNumber + afterLines <= lines.size()) ? lineNumber + afterLines : lines.size()
-            printlnWithIndent(3, "")
-            (first .. last).each { ln ->
-                def indicator = " "
-                def srcLine = lines.get(ln - 1)
-                if (ln == lineNumber) {
-                    indicator = ">"
-                    srcLine = toMagenta(srcLine)
-                }
-                printlnWithIndent(3, "${ln}: ${indicator} ${srcLine}")
-            }
-            printlnWithIndent(3, "")
+        if (!srcFilePath) {
+            return
         }
+        def lines = new File(srcFilePath).readLines()
+        def beforeLines = 1
+        def afterLines = 1
+        def first = (1 <= lineNumber - beforeLines) ? lineNumber - beforeLines : 1
+        def last = (lineNumber + afterLines <= lines.size()) ? lineNumber + afterLines : lines.size()
+        printlnWithIndent(3, "")
+        (first .. last).each { ln ->
+            def indicator = " "
+            def srcLine = lines.get(ln - 1)
+            if (ln == lineNumber) {
+                indicator = ">"
+                srcLine = toMagenta(srcLine)
+            }
+            printlnWithIndent(3, "${ln}: ${indicator} ${srcLine}")
+        }
+        printlnWithIndent(3, "")
     }
 
     def toGray(def line) {
