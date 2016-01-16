@@ -2,13 +2,18 @@ package com.github.ksoichiro.console.reporter.writer
 
 import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
 import com.github.ksoichiro.console.reporter.report.JUnitReport
+import org.fusesource.jansi.Ansi
+import org.fusesource.jansi.AnsiConsole
 import org.gradle.api.Project
+
+import static org.fusesource.jansi.Ansi.ansi
 
 class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
     public static final String INDENT = "  "
 
     @Override
     void write(Project project, JUnitReport report, JUnitReportConfig config) {
+        AnsiConsole.systemInstall()
         report.testsuites.findAll { it.testcases.any { it.failed} }.each { ts ->
             printlnWithIndent(0, "testsuite ${ts.name}:")
             if (config.summaryEnabled) {
@@ -18,7 +23,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                 if (ts.systemOut) {
                     printlnWithIndent(1, "stdout:")
                     ts.systemOut.eachLine {
-                        printlnWithIndent(2, it)
+                        printlnWithIndent(2, toGray(it))
                     }
                 }
             }
@@ -26,7 +31,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                 if (ts.systemErr) {
                     printlnWithIndent(1, "stderr:")
                     ts.systemErr.eachLine {
-                        printlnWithIndent(2, it)
+                        printlnWithIndent(2, toGray(it))
                     }
                 }
             }
@@ -48,6 +53,11 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                 }
             }
         }
+        AnsiConsole.systemUninstall()
+    }
+
+    static Ansi toGray(def line) {
+        ansi().fgBright(Ansi.Color.BLACK).a(line).reset()
     }
 
     static void printlnWithIndent(int level, def line) {
