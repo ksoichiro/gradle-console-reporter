@@ -38,7 +38,10 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             ts.testcases.findAll { it.failed }.each { testcase ->
                 if (config.stacktraceEnabled) {
                     if (testcase.failure.description != null && !testcase.failure.description.isEmpty()) {
-                        printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${testcase.failure.description}")
+                        printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${testcase.failure.exceptionMessage()}")
+                        testcase.failure.exceptionStacktrace()?.each {
+                            printlnWithIndent(2, highlightStacktrace(it, testcase.classname))
+                        }
                     }
                 } else {
                     // Show message without stacktrace
@@ -66,6 +69,15 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
 
     static Ansi toMagenta(def line) {
         ansi().fg(Ansi.Color.MAGENTA).a(line).reset()
+    }
+
+    static Ansi highlightStacktrace(String line, String expr) {
+        def edited = line.replace('\t', '')
+        if (edited.contains(expr)) {
+            ansi().fg(Ansi.Color.RED).a(edited).reset()
+        } else {
+            toGray(edited)
+        }
     }
 
     static void printlnWithIndent(int level, def line) {
