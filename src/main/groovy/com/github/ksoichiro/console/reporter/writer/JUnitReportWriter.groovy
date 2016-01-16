@@ -43,43 +43,55 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                 if (config.stacktraceEnabled) {
                     if (testcase.failure.description != null && !testcase.failure.description.isEmpty()) {
                         printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${testcase.failure.exceptionMessage()}")
-                        testcase.failure.exceptionStacktrace()?.each {
-                            printlnWithIndent(2, highlightStacktrace(it, testcase.classname))
-                            if (shouldHighlight(it, testcase.classname)) {
-                                int lineNumber = -1
-                                // Extract line number: at com.example.CTest.greet(CTest.java:18)
-                                (it =~ /\(.*:([0-9]*)\)$/).each { all, ln ->
-                                    lineNumber = ln.toInteger()
-                                }
-                                if (-1 < lineNumber) {
-                                    // Remove inner class name (e.g. @Enclosed test)
-                                    String targetClassname = testcase.classname.replaceAll('\\$.*', "")
-                                    String srcFilePath = null
-                                    project.sourceSets.each { type ->
-                                        def tmp = type.allSource.find {
-                                            (it as String).replaceAll("/", ".").replaceAll("\\\\", ".").contains(targetClassname)
+                        def limitToSuppress = -1
+                        testcase.failure.exceptionStacktrace()?.eachWithIndex { it, stIdx ->
+                            if (limitToSuppress != 0) {
+                                printlnWithIndent(2, highlightStacktrace(it, testcase.classname))
+                                if (shouldHighlight(it, testcase.classname)) {
+                                    if (limitToSuppress < 0) {
+                                        limitToSuppress = 1 + 5
+                                    }
+                                    int lineNumber = -1
+                                    // Extract line number: at com.example.CTest.greet(CTest.java:18)
+                                    (it =~ /\(.*:([0-9]*)\)$/).each { all, ln ->
+                                        lineNumber = ln.toInteger()
+                                    }
+                                    if (-1 < lineNumber) {
+                                        // Remove inner class name (e.g. @Enclosed test)
+                                        String targetClassname = testcase.classname.replaceAll('\\$.*', "")
+                                        String srcFilePath = null
+                                        project.sourceSets.each { type ->
+                                            def tmp = type.allSource.find {
+                                                (it as String).replaceAll("/", ".").replaceAll("\\\\", ".").contains(targetClassname)
+                                            }
+                                            if (tmp) {
+                                                srcFilePath = tmp
+                                            }
                                         }
-                                        if (tmp) {
-                                            srcFilePath = tmp
+                                        if (srcFilePath) {
+                                            def lines = new File(srcFilePath).readLines()
+                                            def beforeLines = 1
+                                            def afterLines = 1
+                                            def first = (1 <= lineNumber - beforeLines) ? lineNumber - beforeLines : 1
+                                            def last = (lineNumber + afterLines <= lines.size()) ? lineNumber + afterLines : lines.size()
+                                            printlnWithIndent(3, "")
+                                            (first .. last).each { ln ->
+                                                def indicator = " "
+                                                def srcLine = lines.get(ln - 1)
+                                                if (ln == lineNumber) {
+                                                    indicator = ">"
+                                                    srcLine = toMagenta(srcLine)
+                                                }
+                                                printlnWithIndent(3, "${ln}: ${indicator} ${srcLine}")
+                                            }
+                                            printlnWithIndent(3, "")
                                         }
                                     }
-                                    if (srcFilePath) {
-                                        def lines = new File(srcFilePath).readLines()
-                                        def beforeLines = 1
-                                        def afterLines = 1
-                                        def first = (1 <= lineNumber - beforeLines) ? lineNumber - beforeLines : 1
-                                        def last = (lineNumber + afterLines <= lines.size()) ? lineNumber + afterLines : lines.size()
-                                        printlnWithIndent(3, "")
-                                        (first .. last).each { ln ->
-                                            def indicator = " "
-                                            def srcLine = lines.get(ln - 1)
-                                            if (ln == lineNumber) {
-                                                indicator = ">"
-                                                srcLine = toMagenta(srcLine)
-                                            }
-                                            printlnWithIndent(3, "${ln}: ${indicator} ${srcLine}")
-                                        }
-                                        printlnWithIndent(3, "")
+                                }
+                                if (0 < limitToSuppress) {
+                                    limitToSuppress--
+                                    if (limitToSuppress == 0) {
+                                        printlnWithIndent(2, toGray("..."))
                                     }
                                 }
                             }
