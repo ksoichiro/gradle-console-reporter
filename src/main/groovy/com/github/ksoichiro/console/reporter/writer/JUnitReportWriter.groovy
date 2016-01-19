@@ -112,6 +112,9 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
     }
 
     def writePartialSource(String classname, String stacktraceLine) {
+        if (!config.partialSourceInsertionEnabled) {
+            return
+        }
         int lineNumber = getLineNumberFromStacktraceLine(stacktraceLine)
         if (lineNumber == -1) {
             // Not found (might be a native method or unknown source)

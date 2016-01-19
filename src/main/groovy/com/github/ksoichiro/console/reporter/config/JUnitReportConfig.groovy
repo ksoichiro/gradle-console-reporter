@@ -9,4 +9,5 @@ class JUnitReportConfig extends ReportConfig<JUnitReport> {
     boolean stdoutEnabled = false
     boolean stderrEnabled = false
     boolean stacktraceEnabled = true
+    boolean partialSourceInsertionEnabled = true
 }

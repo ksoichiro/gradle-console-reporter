@@ -219,6 +219,10 @@ consoleReporter {
         // Set this property to false if you don't need colorized output.
         // Default is true.
         colorEnabled true
+
+        // Set this property to false if you don't need source code between stacktrace.
+        // Default is true.
+        partialSourceInsertionEnabled true
     }
 
     jacoco {
