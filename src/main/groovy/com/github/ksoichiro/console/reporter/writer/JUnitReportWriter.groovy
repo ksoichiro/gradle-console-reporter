@@ -90,7 +90,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                     if (limitToSuppress < 0) {
                         limitToSuppress = 1 + 5
                     }
-                    printPartialSource(testcase.classname, it)
+                    writePartialSource(testcase.classname, it)
                 }
                 if (0 < limitToSuppress) {
                     limitToSuppress--
@@ -111,7 +111,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
         printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${message}")
     }
 
-    def printPartialSource(String classname, String stacktraceLine) {
+    def writePartialSource(String classname, String stacktraceLine) {
         int lineNumber = getLineNumberFromStacktraceLine(stacktraceLine)
         if (lineNumber == -1) {
             // Not found (might be a native method or unknown source)
