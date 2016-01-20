@@ -35,6 +35,7 @@ class ReportTestSpec extends Specification {
     def executeTask() {
         setup:
         Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
+        project.apply plugin: 'java'
         project.apply plugin: PLUGIN_ID
         project.extensions."${ConsoleReporterExtension.NAME}".with {
             junit {
@@ -97,7 +98,7 @@ class ReportTestSpec extends Specification {
             |<testsuite name="com.example.ExampleTest" tests="2" skipped="0" failures="1" errors="0" timestamp="2015-12-26T13:55:30" hostname="localhost" time="2.418">
             |<properties/>
             |<testcase name="executeTask" classname="com.github.ksoichiro.console.reporter.PluginTest" time="2.374"/>
-            |<testcase name="greet" classname="com.github.ksoichiro.console.reporter.PluginTest" time="0.044">
+            |<testcase name="greet" classname="com.example.ATest" time="0.044">
             |    <failure message="org.junit.ComparisonFailure: expected:&lt;Hello[!]&gt; but was:&lt;Hello[]&gt;" type="org.junit.ComparisonFailure">org.junit.ComparisonFailure: expected:&lt;Hello[!]&gt; but was:&lt;Hello[]&gt;
             |\tat org.junit.Assert.assertEquals(Assert.java:115)
             |\tat org.junit.Assert.assertEquals(Assert.java:144)
