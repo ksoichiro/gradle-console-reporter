@@ -2,6 +2,7 @@ package com.github.ksoichiro.console.reporter
 
 import com.github.ksoichiro.console.reporter.config.JacocoReportConfig
 import com.github.ksoichiro.console.reporter.writer.JacocoReportWriter
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
@@ -75,6 +76,35 @@ class ReportJacocoSpec extends Specification {
 
         then:
         notThrown(Exception)
+    }
+
+    def buildFailure() {
+        setup:
+        Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
+        project.apply plugin: PLUGIN_ID
+        project.apply plugin: 'jacoco'
+        project.extensions."${ConsoleReporterExtension.NAME}".with {
+            junit {
+                enabled false
+            }
+            jacoco {
+                enabled true
+                failIfLessThanThresholdError true
+                thresholdError 100
+            }
+        }
+        def testReportDir = new File("${rootDir}/build/reports/jacoco/test")
+        testReportDir.mkdirs()
+        writeSampleReport(testReportDir)
+
+        when:
+        project.evaluate()
+        project.gradle.taskGraph.addTasks([project.tasks.create('jacocoTestReport')])
+        project.tasks."${ReportJacocoTask.NAME}".execute()
+
+        then:
+        // buildFinish event is not fired when executing task manually...
+        notThrown(GradleException)
     }
 
     void writeSampleReport(File testReportDir) {
