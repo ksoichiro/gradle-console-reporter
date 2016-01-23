@@ -90,8 +90,8 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
                     if (limitToSuppress < 0) {
                         limitToSuppress = 1 + 5
                     }
-                    writePartialSource(testcase.classname, it)
                 }
+                writePartialSource(it)
                 if (0 < limitToSuppress) {
                     limitToSuppress--
                     if (limitToSuppress == 0) {
@@ -111,7 +111,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
         printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${message}")
     }
 
-    def writePartialSource(String classname, String stacktraceLine) {
+    def writePartialSource(String stacktraceLine) {
         if (!config.partialSourceInsertionEnabled) {
             return
         }
@@ -120,6 +120,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             // Not found (might be a native method or unknown source)
             return
         }
+        String classname = extractClassname(stacktraceLine)
         File srcFile = findSourceFile(classname)
         if (!srcFile) {
             return
@@ -227,6 +228,14 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
 
     static boolean shouldHighlight(String line, String expr) {
         line.replace('\t', '').contains(expr)
+    }
+
+    static String extractClassname(String line) {
+        def classname = null
+        (line =~ /^\s+at (.*)\.[^\.]+\(.*\)$/).each { all, contained ->
+            classname = contained
+        }
+        classname
     }
 
     static void printlnWithIndent(int level, def line) {
