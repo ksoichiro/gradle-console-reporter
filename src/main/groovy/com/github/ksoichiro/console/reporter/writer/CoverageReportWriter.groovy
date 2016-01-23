@@ -23,16 +23,9 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
         this.config = config
         this.colorEnabled = config.colorEnabled
         if (config.reportAfterBuildFinished) {
-            def result = toAnsi("${adjustedProjectName()} ${rightAlignedCoverage(report.c0Coverage)}")
             def headers = headerForFirstSubproject()
-            project.gradle.buildFinished {
-                if (headers) {
-                    headers.each {
-                        println it
-                    }
-                }
-                println result
-            }
+            def result = toAnsi("${adjustedProjectName()} ${rightAlignedCoverage(report.c0Coverage)}")
+            project.gradle.buildFinished writeResult(headers, result)
         } else {
             println toAnsi("C0 Coverage: ${rightAlignedCoverage(report.c0Coverage)}")
         }
@@ -94,6 +87,18 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
 
     def projectsIncludedInTaskGraph() {
         project.gradle.taskGraph.allTasks.collect { it.project }.unique().sort()
+    }
+
+    static Closure writeResult(def headers, def result) {
+        def closure = {
+            if (headers) {
+                headers.each {
+                    println it
+                }
+            }
+            println result
+        }
+        closure
     }
 
     static def rightAlignedCoverage(float coverage) {
