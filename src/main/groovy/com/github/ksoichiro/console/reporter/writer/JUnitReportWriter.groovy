@@ -11,7 +11,8 @@ import org.gradle.api.Project
 import static org.fusesource.jansi.Ansi.ansi
 
 class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
-    public static final String INDENT = "  "
+    // Don't specify 'public' modifier for GroovySpy to work on test
+    static final String INDENT = "  "
     Project project
     Map<String, File> sourceMap
     JUnitReportConfig config
