@@ -1,7 +1,9 @@
 package com.github.ksoichiro.console.reporter
 
 import com.github.ksoichiro.console.reporter.config.CoberturaReportConfig
+import com.github.ksoichiro.console.reporter.report.CoberturaReport
 import com.github.ksoichiro.console.reporter.writer.CoberturaReportWriter
+import org.fusesource.jansi.AnsiConsole
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
@@ -9,6 +11,7 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.fusesource.jansi.Ansi.Color.*
+import static org.fusesource.jansi.Ansi.ansi
 
 class ReportCoberturaSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
@@ -161,6 +164,31 @@ class ReportCoberturaSpec extends Specification {
             |    </packages>
             |</coverage>
             |""".stripMargin().stripIndent()
+    }
+
+    def messageColor() {
+        setup:
+        CoberturaReportConfig config = new CoberturaReportConfig()
+        def writer = new CoberturaReportWriter()
+        CoberturaReport report = new CoberturaReport(lineRate: 80)
+        writer.config = config
+        writer.report = report
+        AnsiConsole.systemInstall()
+
+        when:
+        config.colorEnabled = enabled
+        def actual = writer.toAnsi(message)
+
+        then:
+        expected == actual
+
+        cleanup:
+        AnsiConsole.systemUninstall()
+
+        where:
+        enabled | message || expected
+        false   | 'a'     || 'a'
+        true    | 'a'     || 'a' // This is not right, but the color is suppressed by Ansi on test
     }
 
     def styleForQuality() {
