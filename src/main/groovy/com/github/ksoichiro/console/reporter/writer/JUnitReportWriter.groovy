@@ -134,7 +134,7 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             def indicator = " "
             def srcLine = lines.get(ln - 1)
             if (ln == lineNumber) {
-                indicator = ">"
+                indicator = toYellow(">")
                 srcLine = toMagenta(srcLine)
             }
             printlnWithIndent(3, "${ln}: ${indicator} ${srcLine}")
@@ -170,16 +170,20 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
     }
 
     def toCyan(def line) {
-        if (colorEnabled) {
-            ansi().fg(Ansi.Color.CYAN).a(line).reset()
-        } else {
-            line
-        }
+        colorize(line, Ansi.Color.CYAN)
     }
 
     def toMagenta(def line) {
+        colorize(line, Ansi.Color.MAGENTA)
+    }
+
+    def toYellow(def line) {
+        colorize(line, Ansi.Color.YELLOW)
+    }
+
+    def colorize(def line, Ansi.Color color) {
         if (colorEnabled) {
-            ansi().fg(Ansi.Color.MAGENTA).a(line).reset()
+            ansi().fg(color).a(line).reset()
         } else {
             line
         }
