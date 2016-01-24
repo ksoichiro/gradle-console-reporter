@@ -10,7 +10,7 @@ import org.gradle.api.Project
 
 import static org.fusesource.jansi.Ansi.ansi
 
-class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> {
+class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
     // Don't specify 'public' modifier for GroovySpy to work on test
     static final String INDENT = "  "
     Project project
@@ -204,6 +204,14 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
         }
     }
 
+    void printlnWithIndent(int level, def line) {
+        String indent = ''
+        level.times {
+            indent += INDENT
+        }
+        println "${indent}${line}"
+    }
+
     /** Extract line number: at com.example.CTest.greet(CTest.java:18) */
     static def getLineNumberFromStacktraceLine(String stacktraceLine) {
         def lineNumber = -1
@@ -237,13 +245,5 @@ class JUnitReportWriter implements ReportWriter<JUnitReport, JUnitReportConfig> 
             classname = contained
         }
         classname
-    }
-
-    static void printlnWithIndent(int level, def line) {
-        String indent = ''
-        level.times {
-            indent += INDENT
-        }
-        println "${indent}${line}"
     }
 }

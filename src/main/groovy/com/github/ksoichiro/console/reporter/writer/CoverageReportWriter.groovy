@@ -10,7 +10,7 @@ import org.gradle.api.Project
 import static org.fusesource.jansi.Ansi.Color.*
 import static org.fusesource.jansi.Ansi.ansi
 
-abstract class CoverageReportWriter<R extends CoverageReport, C extends CoverageReportConfig<R>> implements ReportWriter<R, C> {
+abstract class CoverageReportWriter<R extends CoverageReport, C extends CoverageReportConfig<R>> extends ReportWriter<R, C> {
     Project project
     boolean colorEnabled
     R report

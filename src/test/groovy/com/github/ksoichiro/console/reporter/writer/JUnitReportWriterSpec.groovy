@@ -62,7 +62,6 @@ class JUnitReportWriterSpec extends Specification {
 
     def writePartialSource() {
         setup:
-        GroovySpy(JUnitReportWriter, global: true)
         rootDir = testProjectDir.root
         if (!rootDir.exists()) {
             rootDir.mkdir()
@@ -85,7 +84,9 @@ class JUnitReportWriterSpec extends Specification {
         project.apply plugin: 'java'
         project.evaluate()
 
-        def writer = new JUnitReportWriter()
+        def writer = Spy(JUnitReportWriter)
+        ByteArrayOutputStream out = new ByteArrayOutputStream()
+        writer.writer = new PrintWriter(out, true)
         writer.project = project
         writer.config = new JUnitReportConfig(partialSourceInsertionEnabled: true)
 
@@ -94,7 +95,11 @@ class JUnitReportWriterSpec extends Specification {
 
         then:
         notThrown(Exception)
-        (1.._) * JUnitReportWriter.printlnWithIndent(_, _)
+        (1.._) * writer.printlnWithIndent(_, _)
+        out.toString().contains(
+            """|      7:           if (true) {
+               |      8: >             throw new RuntimeException("This exception should break the test.");
+               |      9:           }""".stripMargin())
     }
 
     def collectSourceFiles() {
