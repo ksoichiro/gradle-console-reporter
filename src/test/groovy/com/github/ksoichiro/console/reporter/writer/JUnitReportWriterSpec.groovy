@@ -1,6 +1,7 @@
 package com.github.ksoichiro.console.reporter.writer
 
 import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
+import com.github.ksoichiro.console.reporter.report.junit.JUnitTestsuite
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
@@ -100,6 +101,24 @@ class JUnitReportWriterSpec extends Specification {
             """|      7:           if (true) {
                |      8: >             throw new RuntimeException("This exception should break the test.");
                |      9:           }""".stripMargin())
+    }
+
+    def writeSummary() {
+        setup:
+        def writer = Spy(JUnitReportWriter)
+        ByteArrayOutputStream out = new ByteArrayOutputStream()
+        writer.writer = new PrintWriter(out, true)
+        writer.config = new JUnitReportConfig()
+        writer.config.with {
+            summaryEnabled = true
+        }
+
+        when:
+        def ts = new JUnitTestsuite(tests: "5", skipped: "1", failures: "2", errors: "3", time: "2.345")
+        writer.writeSummary(ts)
+
+        then:
+        out.toString().contains("tests: 5, skipped: 1, failures: 2, errors: 3, time: 2.345")
     }
 
     def collectSourceFiles() {
