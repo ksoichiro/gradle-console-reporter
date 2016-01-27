@@ -97,7 +97,7 @@ class JUnitReportWriterSpec extends Specification {
         then:
         notThrown(Exception)
         (1.._) * writer.printlnWithIndent(_, _)
-        out.toString().contains(
+        out.toString().readLines().join('\n').contains(
             """|      7:           if (true) {
                |      8: >             throw new RuntimeException("This exception should break the test.");
                |      9:           }""".stripMargin())
