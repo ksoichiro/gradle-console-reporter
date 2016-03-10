@@ -1,6 +1,5 @@
 package com.github.ksoichiro.console.reporter
 
-import com.github.ksoichiro.console.reporter.ConsoleReporterExtension
 import org.gradle.api.GradleException
 import spock.lang.Specification
 

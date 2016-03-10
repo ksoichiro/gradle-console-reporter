@@ -11,7 +11,6 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 import static org.fusesource.jansi.Ansi.Color.*
-import static org.fusesource.jansi.Ansi.ansi
 
 class ReportCoberturaSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
