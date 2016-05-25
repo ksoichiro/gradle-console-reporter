@@ -20,7 +20,7 @@ class ReportTestTask extends DefaultTask {
             if (extension.junit.reportOnFailure) {
                 project.gradle.taskGraph.afterTask { Task task, TaskState state ->
                     if (task instanceof Test && state.failure) {
-                        execute()
+                        reportJUnit([task] as Set<Test>)
                     }
                 }
             }
@@ -30,12 +30,12 @@ class ReportTestTask extends DefaultTask {
     @TaskAction
     void exec() {
         if (extension.junit.enabled) {
-            reportJUnit()
+            reportJUnit(project.getTasks().findAll{ t -> t instanceof Test} as Set<Test>)
         }
     }
 
-    void reportJUnit() {
-        JUnitReport report = new JUnitReportParser().parse(project, extension.junit)
+    void reportJUnit(Set<Test> testTask) {
+        JUnitReport report = new JUnitReportParser(testTask).parse(project, extension.junit)
         new JUnitReportWriter().write(project, report, extension.junit)
     }
 }

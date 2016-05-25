@@ -5,18 +5,30 @@ import com.github.ksoichiro.console.reporter.report.JUnitReport
 import com.github.ksoichiro.console.reporter.report.junit.JUnitTestcase
 import com.github.ksoichiro.console.reporter.report.junit.JUnitTestsuite
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 
 class JUnitReportParser implements ReportParser<JUnitReport, JUnitReportConfig> {
+    private final Set<Test> testTasks;
+
+    JUnitReportParser(Set<Test> testTasks) {
+        this.testTasks = testTasks;
+    }
+
     @Override
     JUnitReport parse(Project project, JUnitReportConfig config) {
         JUnitReport report = new JUnitReport()
-        def testReportDir = project.file("${project.buildDir}/test-results")
-        if (!testReportDir.exists()) {
-            return report
-        }
+
+        report.testsuites += testTasks
+                .collect { t -> t.getReports().getJunitXml().getDestination() }
+                .findAll { dir -> dir.exists() }
+                .collect { dir -> getTestSuiteReport(project, config, dir) }
+
+        report
+    }
+
+    private JUnitTestsuite getTestSuiteReport(Project project, config, File testReportDir) {
+        def testsuite = new JUnitTestsuite()
         project.fileTree(dir: testReportDir, includes: ['**/*.xml']).each { File file ->
-            def testsuite = new JUnitTestsuite()
-            report.testsuites += testsuite
             testsuite.with {
                 def rootNode = new XmlParser(false, false).parse(file)
                 name = rootNode.@name
@@ -50,6 +62,6 @@ class JUnitReportParser implements ReportParser<JUnitReport, JUnitReportConfig> 
                 }
             }
         }
-        report
+        testsuite
     }
 }
