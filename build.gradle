@@ -15,7 +15,7 @@ plugins {
     id 'maven-publish'
     id 'net.saliman.cobertura' version '2.3.0'
     id 'com.github.kt3k.coveralls' version '2.4.0'
-    id 'com.github.ksoichiro.console.reporter' version '0.3.4'
+//    id 'com.github.ksoichiro.console.reporter' version '0.3.4'
 }
 
 repositories {
@@ -45,7 +45,6 @@ task createClasspathManifest {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'org.fusesource.jansi:jansi:1.11'
     testRuntime files(createClasspathManifest)
     testCompile gradleTestKit()
     testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
@@ -69,9 +68,3 @@ fileTree(dir: "samples").visit { details ->
 }
 
 check.dependsOn('cobertura')
-
-consoleReporter {
-    cobertura {
-        coverageTaskName 'generateCoberturaReport'
-    }
-}

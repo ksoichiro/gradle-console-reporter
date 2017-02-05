@@ -9,7 +9,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static org.fusesource.jansi.Ansi.Color.*
+//import static org.fusesource.jansi.Ansi.Color.*
 
 class ReportJacocoSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
@@ -214,24 +214,24 @@ class ReportJacocoSpec extends Specification {
             |""".stripMargin().stripIndent()
     }
 
-    def styleForQuality() {
-        setup:
-        JacocoReportConfig config = new JacocoReportConfig()
-        def writer = new JacocoReportWriter()
-        writer.config = config
-
-        when:
-        config.thresholdFine = tf
-        config.thresholdWarning = tw
-        def actualColor = writer.styleForQuality(c0coverage)
-
-        then:
-        expectedColor == actualColor
-
-        where:
-        tf | tw | c0coverage || expectedColor
-        90 | 70 | 72.2       || YELLOW
-        50 | 40 | 72.2       || GREEN
-        90 | 70 | 0          || RED
-    }
+//    def styleForQuality() {
+//        setup:
+//        JacocoReportConfig config = new JacocoReportConfig()
+//        def writer = new JacocoReportWriter()
+//        writer.config = config
+//
+//        when:
+//        config.thresholdFine = tf
+//        config.thresholdWarning = tw
+//        def actualColor = writer.styleForQuality(c0coverage)
+//
+//        then:
+//        expectedColor == actualColor
+//
+//        where:
+//        tf | tw | c0coverage || expectedColor
+//        90 | 70 | 72.2       || YELLOW
+//        50 | 40 | 72.2       || GREEN
+//        90 | 70 | 0          || RED
+//    }
 }

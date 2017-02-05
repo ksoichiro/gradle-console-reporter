@@ -3,14 +3,14 @@ package com.github.ksoichiro.console.reporter
 import com.github.ksoichiro.console.reporter.config.CoberturaReportConfig
 import com.github.ksoichiro.console.reporter.report.CoberturaReport
 import com.github.ksoichiro.console.reporter.writer.CoberturaReportWriter
-import org.fusesource.jansi.AnsiConsole
+//import org.fusesource.jansi.AnsiConsole
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-import static org.fusesource.jansi.Ansi.Color.*
+//import static org.fusesource.jansi.Ansi.Color.*
 
 class ReportCoberturaSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
@@ -18,21 +18,21 @@ class ReportCoberturaSpec extends Specification {
     @Rule
     public final TemporaryFolder testProjectDir = new TemporaryFolder()
     File rootDir
-    PrintStream savedPrintStream
-    PrintStream  printStream
+//    PrintStream savedPrintStream
+//    PrintStream  printStream
 
     def setup() {
         rootDir = testProjectDir.root
         if (!rootDir.exists()) {
             rootDir.mkdir()
         }
-        savedPrintStream = System.out
-        printStream = Mock(PrintStream)
-        System.out = printStream
+//        savedPrintStream = System.out
+//        printStream = Mock(PrintStream)
+//        System.out = printStream
     }
 
     def cleanup() {
-        System.out = savedPrintStream
+//        System.out = savedPrintStream
     }
 
     def apply() {
@@ -172,7 +172,7 @@ class ReportCoberturaSpec extends Specification {
         CoberturaReport report = new CoberturaReport(lineRate: 80)
         writer.config = config
         writer.report = report
-        AnsiConsole.systemInstall()
+//        AnsiConsole.systemInstall()
 
         when:
         config.colorEnabled = enabled
@@ -181,8 +181,8 @@ class ReportCoberturaSpec extends Specification {
         then:
         expected == actual
 
-        cleanup:
-        AnsiConsole.systemUninstall()
+//        cleanup:
+//        AnsiConsole.systemUninstall()
 
         where:
         enabled | message || expected
@@ -190,24 +190,24 @@ class ReportCoberturaSpec extends Specification {
         true    | 'a'     || 'a' // This is not right, but the color is suppressed by Ansi on test
     }
 
-    def styleForQuality() {
-        setup:
-        CoberturaReportConfig config = new CoberturaReportConfig()
-        def writer = new CoberturaReportWriter()
-        writer.config = config
-
-        when:
-        config.thresholdFine = tf
-        config.thresholdWarning = tw
-        def actualColor = writer.styleForQuality(c0coverage)
-
-        then:
-        expectedColor == actualColor
-
-        where:
-        tf | tw | c0coverage || expectedColor
-        90 | 70 | 72.2       || YELLOW
-        50 | 40 | 72.2       || GREEN
-        90 | 70 | 0          || RED
-    }
+//    def styleForQuality() {
+//        setup:
+//        CoberturaReportConfig config = new CoberturaReportConfig()
+//        def writer = new CoberturaReportWriter()
+//        writer.config = config
+//
+//        when:
+//        config.thresholdFine = tf
+//        config.thresholdWarning = tw
+//        def actualColor = writer.styleForQuality(c0coverage)
+//
+//        then:
+//        expectedColor == actualColor
+//
+//        where:
+//        tf | tw | c0coverage || expectedColor
+//        90 | 70 | 72.2       || YELLOW
+//        50 | 40 | 72.2       || GREEN
+//        90 | 70 | 0          || RED
+//    }
 }
