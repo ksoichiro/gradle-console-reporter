@@ -4,11 +4,9 @@ import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
 import com.github.ksoichiro.console.reporter.report.JUnitReport
 import com.github.ksoichiro.console.reporter.report.junit.JUnitTestcase
 import com.github.ksoichiro.console.reporter.report.junit.JUnitTestsuite
-//import org.fusesource.jansi.Ansi
-//import org.fusesource.jansi.AnsiConsole
+import com.github.ksoichiro.console.reporter.util.Colorizer
+import com.github.ksoichiro.console.reporter.util.FgColor
 import org.gradle.api.Project
-
-//import static org.fusesource.jansi.Ansi.ansi
 
 class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
     // Don't specify 'public' modifier for GroovySpy to work on test
@@ -23,7 +21,6 @@ class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
         this.project = project
         this.config = config
         this.colorEnabled = config.colorEnabled
-//        AnsiConsole.systemInstall()
         report.testsuites.findAll { it.testcases.any { it.failed} }.eachWithIndex { ts, i ->
             // Insert newline between test suites
             if (0 < i) {
@@ -31,7 +28,6 @@ class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
             }
             writeTestsuite(ts)
         }
-//        AnsiConsole.systemUninstall()
     }
 
     def writeTestsuite(JUnitTestsuite ts) {
@@ -163,51 +159,44 @@ class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
         }
     }
 
-    def toGray(def line) {
-//        if (colorEnabled) {
-//            ansi().fgBright(Ansi.Color.BLACK).a(line).reset()
-//        } else {
+    def toGray(line) {
+        colorize(line, FgColor.BRIGHT_BLACK)
+    }
+
+    def toCyan(line) {
+        colorize(line, FgColor.CYAN)
+    }
+
+    def toMagenta(line) {
+        colorize(line, FgColor.MAGENTA)
+    }
+
+    def toYellow(line) {
+        colorize(line, FgColor.YELLOW)
+    }
+
+    def colorize(line, FgColor color) {
+        if (colorEnabled) {
+            Colorizer.fgColor(color, line)
+        } else {
             line
-//        }
+        }
     }
-
-    def toCyan(def line) {
-//        colorize(line, Ansi.Color.CYAN)
-        line
-    }
-
-    def toMagenta(def line) {
-//        colorize(line, Ansi.Color.MAGENTA)
-        line
-    }
-
-    def toYellow(def line) {
-//        colorize(line, Ansi.Color.YELLOW)
-        line
-    }
-
-//    def colorize(def line, Ansi.Color color) {
-//        if (colorEnabled) {
-//            ansi().fg(color).a(line).reset()
-//        } else {
-//            line
-//        }
-//    }
 
     def highlightStacktrace(String line, String expr) {
         def edited = line.replace('\t', '')
-//        if (colorEnabled) {
-//            if (shouldHighlight(line, expr)) {
-//                ansi().fg(Ansi.Color.RED).a(edited).reset()
-//            } else {
-//                toGray(edited)
-//            }
-//        } else {
+        if (colorEnabled) {
+            if (shouldHighlight(line, expr)) {
+                Colorizer.fgColor(FgColor.RED, edited)
+            } else {
+                toGray(edited)
+            }
+        } else {
             edited
-//        }
+        }
     }
 
-    void printlnWithIndent(int level, def line) {
+    void printlnWithIndent(int level, line) {
         String indent = ''
         level.times {
             indent += INDENT

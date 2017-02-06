@@ -77,6 +77,7 @@ class FunctionalSpec extends Specification {
             |consoleReporter {
             |    junit {
             |        stdoutEnabled true
+            |        colorEnabled false
             |    }
             |}
             |""".stripMargin().stripIndent()

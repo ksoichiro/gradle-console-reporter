@@ -2,13 +2,9 @@ package com.github.ksoichiro.console.reporter.writer
 
 import com.github.ksoichiro.console.reporter.config.CoverageReportConfig
 import com.github.ksoichiro.console.reporter.report.CoverageReport
-//import org.fusesource.jansi.Ansi
-//import org.fusesource.jansi.AnsiConsole
+import com.github.ksoichiro.console.reporter.util.Colorizer
 import org.gradle.api.GradleException
 import org.gradle.api.Project
-
-//import static org.fusesource.jansi.Ansi.Color.*
-//import static org.fusesource.jansi.Ansi.ansi
 
 abstract class CoverageReportWriter<R extends CoverageReport, C extends CoverageReportConfig<R>> extends ReportWriter<R, C> {
     Project project
@@ -46,29 +42,23 @@ abstract class CoverageReportWriter<R extends CoverageReport, C extends Coverage
         null
     }
 
-    def toAnsi(def message) {
-//        if (colorEnabled) {
-//            AnsiConsole.systemInstall()
-//            def result = ansi()
-//                .fg(styleForQuality(report.c0Coverage))
-//                .a(message)
-//                .reset()
-//            AnsiConsole.systemUninstall()
-//            result
-//        } else {
+    def toAnsi(message) {
+        if (colorEnabled) {
+            styleForQuality(report.c0Coverage, message)
+        } else {
             message
-//        }
+        }
     }
 
-//    Ansi.Color styleForQuality(float c0Coverage) {
-//        if (config.thresholdFine <= c0Coverage) {
-//            return GREEN
-//        }
-//        if (config.thresholdWarning <= c0Coverage) {
-//            return YELLOW
-//        }
-//        return RED
-//    }
+    def styleForQuality(float c0Coverage, message) {
+        if (config.thresholdFine <= c0Coverage) {
+            return Colorizer.green(message)
+        }
+        if (config.thresholdWarning <= c0Coverage) {
+            return Colorizer.yellow(message)
+        }
+        return Colorizer.red(message)
+    }
 
     def adjustedProjectName() {
         if (project.is(project.rootProject)) {
