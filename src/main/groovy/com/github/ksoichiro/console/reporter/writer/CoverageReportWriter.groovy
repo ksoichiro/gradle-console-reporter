@@ -5,6 +5,7 @@ import com.github.ksoichiro.console.reporter.report.CoverageReport
 import com.github.ksoichiro.console.reporter.util.Colorizer
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import org.gradle.internal.nativeintegration.services.NativeServices
 
 abstract class CoverageReportWriter<R extends CoverageReport, C extends CoverageReportConfig<R>> extends ReportWriter<R, C> {
     Project project
