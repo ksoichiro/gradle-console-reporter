@@ -6,8 +6,8 @@ jdk:
 
 script:
   - ./gradlew clean check uploadArchives --full-stacktrace
-  - cd samples/jacoco; ./gradlew clean check --full-stacktrace; cd ..
-  - cd samples/cobertura; ./gradlew clean check --full-stacktrace; cd ..
+  - cd samples/jacoco; ./gradlew clean check --full-stacktrace; cd ../../
+  - cd samples/cobertura; ./gradlew clean check --full-stacktrace; cd ../../
 
 after_success:
   - ./gradlew cobertura coveralls --full-stacktrace
