@@ -5,7 +5,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - ./gradlew clean build check --full-stacktrace
+  - ./gradlew clean check uploadArchives --full-stacktrace
   - cd samples/jacoco; ./gradlew clean check --full-stacktrace; cd ..
   - cd samples/cobertura; ./gradlew clean check --full-stacktrace; cd ..
 
