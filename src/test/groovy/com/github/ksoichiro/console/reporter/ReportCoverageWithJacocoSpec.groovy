@@ -1,7 +1,5 @@
 package com.github.ksoichiro.console.reporter
 
-import com.github.ksoichiro.console.reporter.config.JacocoReportConfig
-import com.github.ksoichiro.console.reporter.writer.JacocoReportWriter
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -9,9 +7,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-//import static org.fusesource.jansi.Ansi.Color.*
-
-class ReportJacocoSpec extends Specification {
+class ReportCoverageWithJacocoSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
 
     @Rule
@@ -34,7 +30,7 @@ class ReportJacocoSpec extends Specification {
 
         then:
         notThrown(Exception)
-        project.tasks."${ReportJacocoTask.NAME}" instanceof ReportJacocoTask
+        project.tasks."${ReportCoverageTask.NAME}" instanceof ReportCoverageTask
     }
 
     def executeTask() {
@@ -57,7 +53,7 @@ class ReportJacocoSpec extends Specification {
         when:
         project.evaluate()
         project.gradle.taskGraph.addTasks([project.tasks.create('jacocoTestReport')])
-        project.tasks."${ReportJacocoTask.NAME}".execute()
+        project.tasks."${ReportCoverageTask.NAME}".execute()
 
         then:
         notThrown(Exception)
@@ -72,7 +68,7 @@ class ReportJacocoSpec extends Specification {
         when:
         project.evaluate()
         project.gradle.taskGraph.addTasks([project.tasks.create('jacocoTestReport')])
-        project.tasks."${ReportJacocoTask.NAME}".execute()
+        project.tasks."${ReportCoverageTask.NAME}".execute()
 
         then:
         notThrown(Exception)
@@ -100,7 +96,7 @@ class ReportJacocoSpec extends Specification {
         when:
         project.evaluate()
         project.gradle.taskGraph.addTasks([project.tasks.create('jacocoTestReport')])
-        project.tasks."${ReportJacocoTask.NAME}".execute()
+        project.tasks."${ReportCoverageTask.NAME}".execute()
 
         then:
         // buildFinish event is not fired when executing task manually...

@@ -10,8 +10,9 @@ buildscript {
     }
 }
 
+apply plugin: 'com.github.ksoichiro.console.reporter'
+
 subprojects {
-    apply plugin: 'com.github.ksoichiro.console.reporter'
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
@@ -23,13 +24,13 @@ subprojects {
         testCompile 'junit:junit:4.11'
     }
 
-    consoleReporter {
-        junit {
-            stdoutEnabled true
-            stderrEnabled true
-            stacktraceEnabled true
-        }
-    }
-
     check.dependsOn('jacocoTestReport')
+}
+
+consoleReporter {
+    junit {
+        stdoutEnabled true
+        stderrEnabled true
+        stacktraceEnabled true
+    }
 }

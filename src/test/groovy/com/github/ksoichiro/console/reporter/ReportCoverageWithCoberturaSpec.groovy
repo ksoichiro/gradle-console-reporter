@@ -12,7 +12,7 @@ import spock.lang.Specification
 
 //import static org.fusesource.jansi.Ansi.Color.*
 
-class ReportCoberturaSpec extends Specification {
+class ReportCoverageWithCoberturaSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
 
     @Rule
@@ -44,7 +44,7 @@ class ReportCoberturaSpec extends Specification {
 
         then:
         notThrown(Exception)
-        project.tasks."${ReportCoberturaTask.NAME}" instanceof ReportCoberturaTask
+        project.tasks."${ReportCoverageTask.NAME}" instanceof ReportCoverageTask
     }
 
     def executeTask() {
@@ -67,7 +67,7 @@ class ReportCoberturaSpec extends Specification {
         when:
         project.evaluate()
         project.gradle.taskGraph.addTasks([project.tasks.cobertura])
-        project.tasks."${ReportCoberturaTask.NAME}".execute()
+        project.tasks."${ReportCoverageTask.NAME}".execute()
 
         then:
         notThrown(Exception)
@@ -84,7 +84,7 @@ class ReportCoberturaSpec extends Specification {
         when:
         project.evaluate()
         project.gradle.taskGraph.addTasks([project.tasks.cobertura])
-        project.tasks."${ReportCoberturaTask.NAME}".execute()
+        project.tasks."${ReportCoverageTask.NAME}".execute()
 
         then:
         notThrown(Exception)
@@ -167,22 +167,19 @@ class ReportCoberturaSpec extends Specification {
 
     def messageColor() {
         setup:
+        Project project = ProjectBuilder.builder().build()
         CoberturaReportConfig config = new CoberturaReportConfig()
         def writer = new CoberturaReportWriter()
         CoberturaReport report = new CoberturaReport(lineRate: 80)
         writer.config = config
-        writer.report = report
-//        AnsiConsole.systemInstall()
+        writer.reports = [(project as Project): report]
 
         when:
         config.colorEnabled = enabled
-        def actual = writer.toAnsi(message)
+        def actual = writer.toAnsi(message, report)
 
         then:
         expected == actual
-
-//        cleanup:
-//        AnsiConsole.systemUninstall()
 
         where:
         enabled | message || expected

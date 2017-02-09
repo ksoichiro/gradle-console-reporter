@@ -17,16 +17,18 @@ class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
     boolean colorEnabled
 
     @Override
-    void write(Project project, JUnitReport report, JUnitReportConfig config) {
+    void write(Project project, Map<Project, JUnitReport> reports, JUnitReportConfig config) {
         this.project = project
         this.config = config
         this.colorEnabled = config.colorEnabled
-        report.testsuites.findAll { it.testcases.any { it.failed} }.eachWithIndex { ts, i ->
-            // Insert newline between test suites
-            if (0 < i) {
-                println()
+        reports.values().each { report ->
+            report.testsuites.findAll { it.testcases.any { it.failed} }.eachWithIndex { ts, i ->
+                // Insert newline between test suites
+                if (0 < i) {
+                    println()
+                }
+                writeTestsuite(ts)
             }
-            writeTestsuite(ts)
         }
     }
 

@@ -7,7 +7,7 @@ import org.gradle.api.Project
 abstract class ReportWriter<R extends Report, C extends ReportConfig<R>> {
     PrintWriter writer
 
-    abstract void write(Project project, R report, C config)
+    abstract void write(Project project, Map<Project, R> reports, C config)
 
     void println() {
         println ""

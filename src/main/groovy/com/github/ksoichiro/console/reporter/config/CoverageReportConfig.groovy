@@ -5,6 +5,7 @@ import com.github.ksoichiro.console.reporter.report.CoverageReport
 abstract class CoverageReportConfig<R extends CoverageReport> extends ReportConfig<R> {
     boolean enabled = true
     boolean onlyWhenCoverageTaskExecuted = true
+    @Deprecated
     boolean reportAfterBuildFinished = true
     boolean failIfLessThanThresholdError = false
     boolean autoconfigureCoverageConfig = true

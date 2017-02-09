@@ -1,7 +1,6 @@
 package com.github.ksoichiro.console.reporter
 
 import com.github.ksoichiro.console.reporter.parser.JUnitReportParser
-import com.github.ksoichiro.console.reporter.report.JUnitReport
 import com.github.ksoichiro.console.reporter.writer.JUnitReportWriter
 import org.gradle.api.DefaultTask
 import org.gradle.api.Task
@@ -35,7 +34,7 @@ class ReportTestTask extends DefaultTask {
     }
 
     void reportJUnit(Set<Test> testTask) {
-        JUnitReport report = new JUnitReportParser(testTask).parse(project, extension.junit)
-        new JUnitReportWriter().write(project, report, extension.junit)
+        def reports = [(project): new JUnitReportParser(testTask).parse(project, extension.junit)]
+        new JUnitReportWriter().write(project, reports, extension.junit)
     }
 }

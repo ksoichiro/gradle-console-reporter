@@ -6,9 +6,10 @@ import org.gradle.api.Project
 class ConsoleReporterPlugin implements Plugin<Project> {
     @Override
     void apply(Project target) {
-        target.extensions.create(ConsoleReporterExtension.NAME, ConsoleReporterExtension)
-        target.tasks.create(ReportTestTask.NAME, ReportTestTask)
-        target.tasks.create(ReportJacocoTask.NAME, ReportJacocoTask)
-        target.tasks.create(ReportCoberturaTask.NAME, ReportCoberturaTask)
+        target.rootProject.with {
+            extensions.create(ConsoleReporterExtension.NAME, ConsoleReporterExtension)
+            tasks.create(ReportTestTask.NAME, ReportTestTask)
+            tasks.create(ReportCoverageTask.NAME, ReportCoverageTask)
+        }
     }
 }

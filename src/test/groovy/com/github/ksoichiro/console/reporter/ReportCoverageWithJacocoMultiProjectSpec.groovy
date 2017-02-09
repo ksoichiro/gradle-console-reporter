@@ -6,7 +6,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
-class ReportJacocoMultiProjectSpec extends Specification {
+class ReportCoverageWithJacocoMultiProjectSpec extends Specification {
     static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
 
     @Rule
@@ -35,19 +35,18 @@ class ReportJacocoMultiProjectSpec extends Specification {
         Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
         Project project1 = ProjectBuilder.builder().withName(":project1").withParent(project).withProjectDir(project1Dir).build()
         Project project2 = ProjectBuilder.builder().withName(":project2").withParent(project).withProjectDir(project2Dir).build()
+        project.apply plugin: PLUGIN_ID
+        project.extensions."${ConsoleReporterExtension.NAME}".with {
+            junit {
+                enabled false
+            }
+            jacoco {
+                enabled true
+            }
+        }
         [project1, project2].each { p ->
-            p.apply plugin: PLUGIN_ID
             p.apply plugin: 'java'
             p.apply plugin: 'jacoco'
-
-            p.extensions."${ConsoleReporterExtension.NAME}".with {
-                junit {
-                    enabled false
-                }
-                jacoco {
-                    enabled true
-                }
-            }
         }
 
         def testReport1Dir = new File("${project1Dir}/build/reports/jacoco/test")
@@ -63,8 +62,7 @@ class ReportJacocoMultiProjectSpec extends Specification {
         project2.evaluate()
         project1.gradle.taskGraph.addTasks([project1.tasks.jacocoTestReport])
         project2.gradle.taskGraph.addTasks([project2.tasks.jacocoTestReport])
-        project1.tasks."${ReportJacocoTask.NAME}".execute()
-        project2.tasks."${ReportJacocoTask.NAME}".execute()
+        project.tasks."${ReportCoverageTask.NAME}".execute()
 
         then:
         notThrown(Exception)
