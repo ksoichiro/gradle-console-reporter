@@ -95,4 +95,66 @@ class FunctionalSpec extends Specification {
         stdout.contains("com.example.ATest:")
         TaskOutcome.FAILED == result.task(":test").getOutcome()
     }
+
+    def reportCoverage() throws IOException {
+        setup:
+        def buildFileContent = """\
+            |plugins {
+            |    id '${PLUGIN_ID}'
+            |}
+            |repositories {
+            |    mavenCentral()
+            |}
+            |
+            |apply plugin: 'java'
+            |dependencies {
+            |    testCompile 'junit:junit:4.11'
+            |}
+            |
+            |consoleReporter {
+            |    junit {
+            |        enabled false
+            |    }
+            |    jacoco {
+            |        enabled true
+            |    }
+            |}
+            |""".stripMargin().stripIndent()
+        buildFile.text = buildFileContent
+
+        new File("${testProjectDir.root}/src/test/java/com/example/ATest.java").text = """\
+            |package com.example;
+            |
+            |import org.junit.Before;
+            |import org.junit.Test;
+            |
+            |import static org.junit.Assert.*;
+            |
+            |public class ATest {
+            |    A instance;
+            |
+            |    @Before
+            |    public void setup() {
+            |        instance = new A();
+            |    }
+            |
+            |    @Test
+            |    public void greet() {
+            |        System.out.println("debug log in test");
+            |        assertEquals("Hello", instance.greet());
+            |    }
+            |}""".stripMargin().stripIndent()
+
+        when:
+        def result = GradleRunner.create()
+            .withProjectDir(testProjectDir.root)
+            .withArguments("check")
+            .withPluginClasspath(pluginClasspath)
+            .build()
+        def stdout = result.output
+        println stdout
+
+        then:
+        TaskOutcome.SUCCESS == result.task(":check").getOutcome()
+    }
 }
