@@ -29,7 +29,6 @@ class ReportTestSpec extends Specification {
 
         then:
         notThrown(Exception)
-        project.tasks."${ReportTestTask.NAME}" instanceof ReportTestTask
     }
 
     def executeTask() {
@@ -51,7 +50,7 @@ class ReportTestSpec extends Specification {
 
         when:
         project.evaluate()
-        project.tasks."${ReportTestTask.NAME}".execute()
+        project.tasks.test.execute()
 
         then:
         notThrown(Exception)
@@ -60,11 +59,12 @@ class ReportTestSpec extends Specification {
     def executeTaskWithoutReport() {
         setup:
         Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
+        project.apply plugin: 'java'
         project.apply plugin: PLUGIN_ID
 
         when:
         project.evaluate()
-        project.tasks."${ReportTestTask.NAME}".execute()
+        project.tasks.test.execute()
 
         then:
         notThrown(Exception)
@@ -73,6 +73,7 @@ class ReportTestSpec extends Specification {
     def executeTaskStacktraceDisabled() {
         setup:
         Project project = ProjectBuilder.builder().withProjectDir(rootDir).build()
+        project.apply plugin: 'java'
         project.apply plugin: PLUGIN_ID
         project.extensions."${ConsoleReporterExtension.NAME}".with {
             junit {
@@ -86,7 +87,7 @@ class ReportTestSpec extends Specification {
 
         when:
         project.evaluate()
-        project.tasks."${ReportTestTask.NAME}".execute()
+        project.tasks.test.execute()
 
         then:
         notThrown(Exception)

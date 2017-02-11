@@ -8,7 +8,7 @@ class ConsoleReporterPlugin implements Plugin<Project> {
     void apply(Project target) {
         target.rootProject.with {
             extensions.create(ConsoleReporterExtension.NAME, ConsoleReporterExtension)
-            tasks.create(ReportTestTask.NAME, ReportTestTask)
+            new ReportTestAction().hook(target)
             tasks.create(ReportCoverageTask.NAME, ReportCoverageTask)
         }
     }
