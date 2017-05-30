@@ -1,8 +1,10 @@
 package com.github.ksoichiro.console.reporter
 
 import com.github.ksoichiro.console.reporter.parser.CoberturaReportParser
+import com.github.ksoichiro.console.reporter.parser.IstanbulReportParser
 import com.github.ksoichiro.console.reporter.parser.JacocoReportParser
 import com.github.ksoichiro.console.reporter.writer.CoberturaReportWriter
+import com.github.ksoichiro.console.reporter.writer.IstanbulReportWriter
 import com.github.ksoichiro.console.reporter.writer.JacocoReportWriter
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
@@ -52,6 +54,10 @@ class ReportCoverageTask extends DefaultTask {
             reportCobertura()
             return
         }
+        if (extension.istanbul.enabled && project.rootProject.allprojects.any { it.plugins.hasPlugin('com.moowork.node')}) {
+            reportIstanbul()
+            return
+        }
         didWork = false
     }
 
@@ -71,6 +77,15 @@ class ReportCoverageTask extends DefaultTask {
             [it, new CoberturaReportParser().parse(it, extension.cobertura)]
         }
         new CoberturaReportWriter().write(project, reports, extension.cobertura)
+    }
+
+    void reportIstanbul() {
+        def reports = project.rootProject.allprojects
+            .findAll { it.plugins.hasPlugin('com.moowork.node') }
+            .collectEntries {
+            [it, new IstanbulReportParser().parse(it, extension.istanbul)]
+        }
+        new IstanbulReportWriter().write(project, reports, extension.istanbul)
     }
 
     def defineTaskGraph() {

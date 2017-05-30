@@ -16,6 +16,7 @@ It's useful when you use CI services that don't save artifacts.
 * JUnit test report
 * JaCoCo coverage report
 * Cobertura coverage report
+* Istanbul (Node) coverage report
 
 ## Usage
 
@@ -187,6 +188,7 @@ This task will be executed automatically after `jacocoTestReport` task by defaul
 Print Cobertura coverage report.  
 This task will be executed automatically after `cobertura` task by default, so you don't need to call it.
 
+
 ## Configurations
 
 ```gradle
@@ -331,6 +333,73 @@ consoleReporter {
         // Set this property to your Cobertura report XML file.
         // Default is null, which means
         // ${project.buildDir}/reports/cobertura/coverage.xml
+        // will be parsed.
+        reportFile
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is greater than or equals to this value,
+        // the coverage will be shown with green color.
+        // Default is 90.
+        thresholdFine 90
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is greater than or equals to this value,
+        // the coverage will be shown with yellow color.
+        // (When the coverage is less than this value, result will be red.)
+        // Default is 70.
+        thresholdWarning 70
+
+        // Set this property to a certain C0 coverage percentage.
+        // When the coverage is less than this value and
+        // failIfLessThanThresholdError property is set to true,
+        // the build will fail.
+        // Default is 0.
+        thresholdError 0
+
+        // Set this property if you want to customize build error message
+        // when you use 'failIfLessThanThresholdError' feature.
+        brokenCoverageErrorMessage "Coverage has fallen below the threshold in some projects."
+
+        // Set this property to false if you don't need colorized output.
+        // Default is true.
+        colorEnabled true
+    }
+
+    istanbul {
+        // Set this property to true if you need Istanbul report.
+        // Default is true.
+        enabled true
+
+        // Set this property to false if you want to see console report always.
+        onlyWhenCoverageTaskExecuted true
+
+        // Set this property to false if you want to see console report
+        // just after each project's istanbul task.
+        // If set to true, all reports will be shown at the end of builds.
+        // Default is true.
+        reportAfterBuildFinished true
+
+        // Set this property to true if you want to treat a lack of the minimum coverage as an build error.
+        // This property sees thresholdError property, and if the coverage has fallen below this value
+        // the plugin will throw an exception to cause a build error.
+        // Default is false.
+        // If you set this to true, you should also set thresholdError property.
+        failIfLessThanThresholdError false
+
+        // Set this property to false if you don't like this plugin automatically changing some
+        // property of cobertura plugin.
+        // If this is set to true, the plugin will set some properties of cobertura plugin
+        // to calculate coverage.
+        // Default is true.
+        autoconfigureCoverageConfig true
+
+        // Set this property to your custom istanbul task name, if you need.
+        // Default is 'generateIstanbulReport'.
+        coverageTaskName 'generateCoberturaReport'
+
+        // Set this property to your Istanbul report JSON file.
+        // Default is null, which means
+        // ${project.projectDir}/coverage/coverage-summary.json
         // will be parsed.
         reportFile
 
