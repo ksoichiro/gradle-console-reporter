@@ -1,6 +1,7 @@
 package com.github.ksoichiro.console.reporter
 
 import com.github.ksoichiro.console.reporter.config.CoberturaReportConfig
+import com.github.ksoichiro.console.reporter.config.IstanbulReportConfig
 import com.github.ksoichiro.console.reporter.config.JUnitReportConfig
 import com.github.ksoichiro.console.reporter.config.JacocoReportConfig
 import org.gradle.api.GradleException
@@ -11,11 +12,13 @@ class ConsoleReporterExtension {
     JUnitReportConfig junit
     JacocoReportConfig jacoco
     CoberturaReportConfig cobertura
+    IstanbulReportConfig istanbul
 
     ConsoleReporterExtension() {
         junit = new JUnitReportConfig()
         jacoco = new JacocoReportConfig()
         cobertura = new CoberturaReportConfig()
+        istanbul = new IstanbulReportConfig()
     }
 
     def methodMissing(String name, def args) {

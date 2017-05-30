@@ -1,0 +1,10 @@
+{
+    "name": "istanbul-test",
+    "version": "0.0.0",
+    "scripts": {
+        "coverage": "istanbul cover ./src/*.js"
+    },
+    "devDependencies": {
+        "istanbul": "*"
+    }
+}

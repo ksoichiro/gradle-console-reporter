@@ -1,0 +1,27 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url uri('../../.repo')
+        }
+        maven {
+            url uri('https://plugins.gradle.org/m2/')
+        }
+    }
+    dependencies {
+        classpath 'com.github.ksoichiro:gradle-console-reporter:+'
+        classpath 'com.moowork.gradle:gradle-node-plugin:+'
+    }
+}
+
+apply plugin: 'com.github.ksoichiro.console.reporter'
+apply plugin: 'com.moowork.node'
+
+consoleReporter {
+    istanbul {
+        thresholdFine 50
+    }
+}
+
+//check.dependsOn('istanbulTestReport')
