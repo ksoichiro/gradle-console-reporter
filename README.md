@@ -16,7 +16,7 @@ It's useful when you use CI services that don't save artifacts.
 * JUnit test report
 * JaCoCo coverage report
 * Cobertura coverage report
-* Istanbul coverage report
+* Istanbul (Node) coverage report
 
 ## Usage
 
@@ -188,9 +188,6 @@ This task will be executed automatically after `jacocoTestReport` task by defaul
 Print Cobertura coverage report.  
 This task will be executed automatically after `cobertura` task by default, so you don't need to call it.
 
-### reportIstanbul
-
-Print Istanbul coverage report.  
 
 ## Configurations
 
@@ -370,8 +367,8 @@ consoleReporter {
 
     istanbul {
         // Set this property to true if you need Istanbul report.
-        // Default is false.
-        enabled false
+        // Default is true.
+        enabled true
 
         // Set this property to false if you want to see console report always.
         onlyWhenCoverageTaskExecuted true
