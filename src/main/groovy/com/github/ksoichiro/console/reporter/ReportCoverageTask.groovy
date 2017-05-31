@@ -41,16 +41,6 @@ class ReportCoverageTask extends DefaultTask {
                     }
                 }
             }
-            if (extension.istanbul.autoconfigureCoverageConfig) {
-                // Enable XML report carefully and silently
-                project.rootProject.allprojects.findAll { it.extensions.findByName('istanbul') != null }.each {
-                    def istanbul = it.extensions.findByName('istanbul')
-                    Set formats = istanbul.coverageFormats
-                    if (formats && !formats.contains('json')) {
-                        istanbul.coverageFormats += 'json'
-                    }
-                }
-            }
         }
     }
 

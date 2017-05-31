@@ -10,7 +10,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.ksoichiro:gradle-console-reporter:+'
+        classpath files('../../build/libs/gradle-console-reporter-0.6.0-SNAPSHOT.jar')
+        //classpath 'com.github.ksoichiro:gradle-console-reporter:+'
         classpath 'com.moowork.gradle:gradle-node-plugin:+'
     }
 }
@@ -21,7 +22,9 @@ apply plugin: 'com.moowork.node'
 consoleReporter {
     istanbul {
         thresholdFine 50
+        reportFile = new File("${project.buildDir}/coverage/report-json/coverage-summary.json")
     }
 }
 
-//check.dependsOn('istanbulTestReport')
+npm_run_test.finalizedBy('check')
+
