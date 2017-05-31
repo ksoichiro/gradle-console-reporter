@@ -10,8 +10,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath files('../../build/libs/gradle-console-reporter-0.6.0-SNAPSHOT.jar')
-        //classpath 'com.github.ksoichiro:gradle-console-reporter:+'
+        classpath 'com.github.ksoichiro:gradle-console-reporter:+'
         classpath 'com.moowork.gradle:gradle-node-plugin:+'
     }
 }
