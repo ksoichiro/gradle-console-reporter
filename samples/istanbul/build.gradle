@@ -25,6 +25,3 @@ consoleReporter {
         reportFile = new File("${project.buildDir}/coverage/report-json/coverage-summary.json")
     }
 }
-
-npm_run_test.finalizedBy('check')
-

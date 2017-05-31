@@ -4,6 +4,6 @@ import com.github.ksoichiro.console.reporter.report.IstanbulReport
 
 class IstanbulReportConfig extends CoverageReportConfig<IstanbulReport> {
     IstanbulReportConfig() {
-        coverageTaskName = 'npm_run_test'
+        boolean enabled = true
     }
 }

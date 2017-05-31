@@ -9,8 +9,7 @@ class IstanbulReportParser implements ReportParser<IstanbulReport, IstanbulRepor
     @Override
     IstanbulReport parse(Project project, IstanbulReportConfig config) {
         IstanbulReport report = new IstanbulReport()
-        if (config.onlyWhenCoverageTaskExecuted
-            && !project.gradle.taskGraph.hasTask("${project.path == ':' ? '' : project.path}:${config.coverageTaskName}")) {
+        if (config.onlyWhenCoverageTaskExecuted) {
             return report
         }
         def testReportFile = config.reportFile ?: project.file("${project.projectDir}/coverage/coverage-summary.json")
