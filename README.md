@@ -1,15 +1,14 @@
 # gradle-console-reporter
 
-[![Build Status](https://img.shields.io/travis/ksoichiro/gradle-console-reporter/master.svg?style=flat-square)](https://travis-ci.org/ksoichiro/gradle-console-reporter)
-[![Build status](https://img.shields.io/appveyor/ci/ksoichiro/gradle-console-reporter/master.svg?style=flat-square)](https://ci.appveyor.com/project/ksoichiro/gradle-console-reporter)
-[![Coverage Stagus](https://img.shields.io/coveralls/ksoichiro/gradle-console-reporter/master.svg?style=flat-square)](https://coveralls.io/github/ksoichiro/gradle-console-reporter?branch=master)
+[![build status](https://gitlab.com/bti360/gradle-console-reporter/badges/master/build.svg)](https://gitlab.com/bti360/gradle-console-reporter/commits/master)
+[![coverage report](https://gitlab.com/bti360/gradle-console-reporter/badges/master/coverage.svg)](https://gitlab.com/bti360/gradle-console-reporter/commits/master)
 
 > Gradle plugin to report various kinds of summaries to console.  
 
 This plugin will aggregate test reports and show them to console.  
 It's useful when you use CI services that don't save artifacts.
 
-<img src="samples/images/demo1.png" width="400">
+![demo-image](samples/images/demo1.png)
 
 ## Available reports
 
@@ -435,6 +434,8 @@ consoleReporter {
 ```
 
 ## License
+
+    Copyright 2017 BTI360
 
     Copyright 2015 Soichiro Kashima
 
