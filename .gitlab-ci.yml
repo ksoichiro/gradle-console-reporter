@@ -6,4 +6,4 @@ stages:
 test:
   stage: test
   script:
-    - "./gradlew clean build test check"
+    - "./gradlew clean test check"
