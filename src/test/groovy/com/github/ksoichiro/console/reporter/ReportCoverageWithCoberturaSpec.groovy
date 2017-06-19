@@ -13,7 +13,7 @@ import spock.lang.Specification
 //import static org.fusesource.jansi.Ansi.Color.*
 
 class ReportCoverageWithCoberturaSpec extends Specification {
-    static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
+    static final String PLUGIN_ID = 'com.bti360.console.reporter'
 
     @Rule
     public final TemporaryFolder testProjectDir = new TemporaryFolder()
