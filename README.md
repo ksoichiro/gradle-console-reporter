@@ -12,6 +12,7 @@ It's useful when you use CI services that don't save artifacts.
 
 ## Available reports
 
+* Total coverage report
 * JUnit test report
 * JaCoCo coverage report
 * Cobertura coverage report
@@ -172,6 +173,10 @@ cobertura: 71.4%
 
 ## Tasks
 
+### reportTotal
+
+Print the aggregated test report.
+
 ### reportTest
 
 Print JUnit test report.  
@@ -187,11 +192,20 @@ This task will be executed automatically after `jacocoTestReport` task by defaul
 Print Cobertura coverage report.  
 This task will be executed automatically after `cobertura` task by default, so you don't need to call it.
 
+### reportIstanbul
+
+Print Istanbul coverage report.  
 
 ## Configurations
 
 ```gradle
 consoleReporter {
+    total {
+        // Set this property to true if you want an aggregated report.
+        // Default is false.
+        enabled false
+    }
+
     junit {
         // Set this property to false if you don't need JUnit report.
         // Default is true.

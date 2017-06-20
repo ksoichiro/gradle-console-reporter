@@ -6,48 +6,48 @@ import com.github.ksoichiro.console.reporter.util.Colorizer
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 
-abstract class CoverageReportWriter<R extends CoverageReport, C extends CoverageReportConfig<R>> extends ReportWriter<R, C> {
-    Project project
-    boolean colorEnabled
-    Map<Project, R> reports
-    C config
+class CoverageReportWriter extends ReportWriter<CoverageReport, CoverageReportConfig> {
 
-    @Override
-    void write(Project project, Map<Project, R> reports, C config) {
-        this.project = project
-        this.reports = reports
-        this.config = config
-        this.colorEnabled = config.colorEnabled
+    static write(Project project, Map<Project, CoverageReport> reports, Map<Project, CoverageReportConfig> reportConfigs) {
+        printOutCoverageReport(project, reports, reportConfigs)
+        checkForThresholdFailure(reports, reportConfigs, project)
+    }
 
+    static printOutCoverageReport(Project project, Map<Project, CoverageReport> reports, Map<Project, CoverageReportConfig> reportConfigs) {
         project.gradle.buildFinished {
             println ""
             println "Coverage summary:"
             def maxLength = reports.keySet().max { it.name.length() }.name.length()
-            reports.each { Project p, R report ->
-                println toAnsi("${adjustedProjectName(p, maxLength)} ${rightAlignedCoverage(report.c0Coverage)}", report)
+            reports.each { Project p, CoverageReport report ->
+                println(
+                    toAnsi("${adjustedProjectName(p, maxLength)} ${rightAlignedCoverage(report.c0Coverage)}",
+                        report,
+                        reportConfigs.get(p)))
             }
         }
+    }
 
-        if (config.failIfLessThanThresholdError) {
-            reports.each { Project p, R report ->
-                if (report.c0Coverage < config.thresholdError) {
+    static Map<Project, CoverageReport> checkForThresholdFailure(Map<Project, CoverageReport> reports, Map<Project, CoverageReportConfig> reportConfigs, project) {
+        reports.each { Project p, CoverageReport report ->
+            if (reportConfigs.get(p)?.failIfLessThanThresholdError) {
+                if (report.c0Coverage < reportConfigs.get(p).thresholdError) {
                     project.gradle.buildFinished {
-                        throw new GradleException(config.brokenCoverageErrorMessage)
+                        throw new GradleException(reportConfigs.get(p).brokenCoverageErrorMessage)
                     }
                 }
             }
         }
     }
 
-    def toAnsi(message, R report) {
-        if (colorEnabled) {
-            styleForQuality(report.c0Coverage, message)
+    static toAnsi(message, CoverageReport report, CoverageReportConfig config) {
+        if (config?.colorEnabled) {
+            styleForQuality(report.c0Coverage, message, config)
         } else {
             message
         }
     }
 
-    def styleForQuality(float c0Coverage, message) {
+    static styleForQuality(float c0Coverage, message, CoverageReportConfig config) {
         if (config.thresholdFine <= c0Coverage) {
             return Colorizer.green(message)
         }

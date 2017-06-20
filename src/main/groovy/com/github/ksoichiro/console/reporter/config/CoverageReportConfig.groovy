@@ -1,8 +1,6 @@
 package com.github.ksoichiro.console.reporter.config
 
-import com.github.ksoichiro.console.reporter.report.CoverageReport
-
-abstract class CoverageReportConfig<R extends CoverageReport> extends ReportConfig<R> {
+abstract class CoverageReportConfig extends ReportConfig {
     boolean enabled = true
     boolean onlyWhenCoverageTaskExecuted = true
     @Deprecated

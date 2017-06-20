@@ -16,7 +16,6 @@ class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
     JUnitReportConfig config
     boolean colorEnabled
 
-    @Override
     void write(Project project, Map<Project, JUnitReport> reports, JUnitReportConfig config) {
         this.project = project
         this.config = config

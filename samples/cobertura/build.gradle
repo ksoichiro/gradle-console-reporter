@@ -1,9 +1,7 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url uri('../../.repo')
-        }
+        mavenLocal()
     }
     dependencies {
         classpath 'gradle.plugin.com.bti360:gradle-console-reporter:+'

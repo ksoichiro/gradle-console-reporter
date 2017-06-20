@@ -1,12 +1,10 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url uri('../../.repo')
-        }
+        mavenLocal()
     }
     dependencies {
-        classpath 'gradle.plugin.com.bti360:gradle-console-reporter:+'
+        classpath 'com.bti360:gradle-console-reporter:0.6.2-SNAPSHOT'
     }
 }
 
@@ -28,6 +26,10 @@ subprojects {
 }
 
 consoleReporter {
+    total {
+        enabled = true
+    }
+
     junit {
         stdoutEnabled true
         stderrEnabled true

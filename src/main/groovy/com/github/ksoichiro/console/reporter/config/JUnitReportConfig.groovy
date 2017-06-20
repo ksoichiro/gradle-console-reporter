@@ -1,8 +1,6 @@
 package com.github.ksoichiro.console.reporter.config
 
-import com.github.ksoichiro.console.reporter.report.JUnitReport
-
-class JUnitReportConfig extends ReportConfig<JUnitReport> {
+class JUnitReportConfig extends ReportConfig {
     boolean enabled = true
     boolean reportOnFailure = true
     boolean summaryEnabled = false

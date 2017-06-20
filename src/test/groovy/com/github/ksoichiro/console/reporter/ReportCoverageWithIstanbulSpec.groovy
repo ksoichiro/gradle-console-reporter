@@ -2,7 +2,7 @@ package com.github.ksoichiro.console.reporter
 
 import com.github.ksoichiro.console.reporter.config.IstanbulReportConfig
 import com.github.ksoichiro.console.reporter.report.IstanbulReport
-import com.github.ksoichiro.console.reporter.writer.IstanbulReportWriter
+import com.github.ksoichiro.console.reporter.writer.CoverageReportWriter
 import org.gradle.api.Project
 
 import org.gradle.testfixtures.ProjectBuilder
@@ -117,14 +117,14 @@ class ReportCoverageWithIstanbulSpec extends Specification {
         setup:
         Project project = ProjectBuilder.builder().build()
         IstanbulReportConfig config = new IstanbulReportConfig()
-        def writer = new IstanbulReportWriter()
+        def writer = new CoverageReportWriter()
         IstanbulReport report = new IstanbulReport(percentage: 80)
         writer.config = config
         writer.reports = [(project as Project): report]
 
         when:
         config.colorEnabled = enabled
-        def actual = writer.toAnsi(message, report)
+        def actual = writer.toAnsi(message, report, config)
 
         then:
         expected == actual

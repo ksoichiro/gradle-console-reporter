@@ -1,6 +1,6 @@
 ext {
     meta = [:]
-    meta.versionName = '0.6.0'
+    meta.versionName = '0.6.2-SNAPSHOT'
     meta.group = 'com.bti360'
     meta.pomArtifactId = 'gradle-console-reporter'
     meta.javaCompatibility = 1.6

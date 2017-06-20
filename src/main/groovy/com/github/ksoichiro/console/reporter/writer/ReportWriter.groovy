@@ -4,10 +4,8 @@ import com.github.ksoichiro.console.reporter.config.ReportConfig
 import com.github.ksoichiro.console.reporter.report.Report
 import org.gradle.api.Project
 
-abstract class ReportWriter<R extends Report, C extends ReportConfig<R>> {
+abstract class ReportWriter<R extends Report, C extends ReportConfig> {
     PrintWriter writer
-
-    abstract void write(Project project, Map<Project, R> reports, C config)
 
     void println() {
         println ""

@@ -1,17 +1,21 @@
 package com.github.ksoichiro.console.reporter
 
+import com.github.ksoichiro.console.reporter.config.CoverageReportConfig
 import com.github.ksoichiro.console.reporter.parser.CoberturaReportParser
 import com.github.ksoichiro.console.reporter.parser.IstanbulReportParser
 import com.github.ksoichiro.console.reporter.parser.JacocoReportParser
-import com.github.ksoichiro.console.reporter.writer.CoberturaReportWriter
-import com.github.ksoichiro.console.reporter.writer.IstanbulReportWriter
-import com.github.ksoichiro.console.reporter.writer.JacocoReportWriter
+import com.github.ksoichiro.console.reporter.report.CoverageReport
+import com.github.ksoichiro.console.reporter.report.TotalReport
+import com.github.ksoichiro.console.reporter.writer.CoverageReportWriter
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 
 class ReportCoverageTask extends DefaultTask {
     public static String NAME = 'reportCoverage'
     ConsoleReporterExtension extension
+    Map<Project, CoverageReport> reports = [:]
+    Map<Project, CoverageReportConfig> reportConfigs = [:]
 
     ReportCoverageTask() {
         project.afterEvaluate {
@@ -48,44 +52,59 @@ class ReportCoverageTask extends DefaultTask {
     void exec() {
         if (extension.jacoco.enabled && project.rootProject.allprojects.any { it.plugins.hasPlugin('jacoco')}) {
             reportJacoco()
-            return
         }
         if (extension.cobertura.enabled && project.rootProject.allprojects.any { it.plugins.hasPlugin('net.saliman.cobertura')}) {
             reportCobertura()
-            return
         }
         if (extension.istanbul.enabled && project.rootProject.allprojects.any { it.plugins.hasPlugin('com.moowork.node')}) {
             reportIstanbul()
-            return
         }
+        if (extension.total.enabled) {
+            TotalReport totalReport = new TotalReport()
+            totalReport.reports.addAll(reports.values())
+            reports.put(project, totalReport)
+        }
+        new CoverageReportWriter().write(project, reports, reportConfigs)
         didWork = false
     }
 
     void reportJacoco() {
-        def reports = project.rootProject.allprojects
+        reports.putAll(project.rootProject.allprojects
             .findAll { it.plugins.hasPlugin('jacoco') }
             .collectEntries {
             [it, new JacocoReportParser().parse(it, extension.jacoco)]
-        }
-        new JacocoReportWriter().write(project, reports, extension.jacoco)
+        })
+        reportConfigs.putAll(project.rootProject.allprojects
+            .findAll { it.plugins.hasPlugin('jacoco') }
+            .collectEntries {
+            [it, extension.jacoco]
+        })
     }
 
     void reportCobertura() {
-        def reports = project.rootProject.allprojects
+        reports.putAll(project.rootProject.allprojects
             .findAll { it.plugins.hasPlugin('net.saliman.cobertura') }
             .collectEntries {
             [it, new CoberturaReportParser().parse(it, extension.cobertura)]
-        }
-        new CoberturaReportWriter().write(project, reports, extension.cobertura)
+        })
+        reportConfigs.putAll(project.rootProject.allprojects
+            .findAll { it.plugins.hasPlugin('net.saliman.cobertura') }
+            .collectEntries {
+            [it, extension.cobertura]
+        })
     }
 
     void reportIstanbul() {
-        def reports = project.rootProject.allprojects
+        reports.putAll(project.rootProject.allprojects
             .findAll { it.plugins.hasPlugin('com.moowork.node') }
             .collectEntries {
             [it, new IstanbulReportParser().parse(it, extension.istanbul)]
-        }
-        new IstanbulReportWriter().write(project, reports, extension.istanbul)
+        })
+        reportConfigs.putAll(project.rootProject.allprojects
+            .findAll { it.plugins.hasPlugin('com.moowork.node') }
+            .collectEntries {
+            [it, extension.istanbul]
+        })
     }
 
     def defineTaskGraph() {

@@ -13,7 +13,7 @@ class JacocoReport implements CoverageReport {
     }
 
     @Override
-    public float getC0Coverage() {
+    float getC0Coverage() {
         JacocoCounter instructionCounter = counters.find { it.type == JacocoCounterType.INSTRUCTION }
         if (!instructionCounter) {
             return 0
