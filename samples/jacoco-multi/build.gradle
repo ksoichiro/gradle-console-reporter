@@ -4,7 +4,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.bti360:gradle-console-reporter:0.6.2-SNAPSHOT'
+        classpath 'com.bti360:gradle-console-reporter:+'
     }
 }
 
