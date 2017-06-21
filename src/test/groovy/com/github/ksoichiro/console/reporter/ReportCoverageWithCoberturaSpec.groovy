@@ -168,12 +168,9 @@ class ReportCoverageWithCoberturaSpec extends Specification {
 
     def messageColor() {
         setup:
-        Project project = ProjectBuilder.builder().build()
         CoberturaReportConfig config = new CoberturaReportConfig()
         def writer = new CoverageReportWriter()
         CoberturaReport report = new CoberturaReport(lineRate: 80)
-        writer.config = config
-        writer.reports = [(project as Project): report]
 
         when:
         config.colorEnabled = enabled

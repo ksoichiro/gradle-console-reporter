@@ -115,12 +115,9 @@ class ReportCoverageWithIstanbulSpec extends Specification {
 
     def messageColor() {
         setup:
-        Project project = ProjectBuilder.builder().build()
         IstanbulReportConfig config = new IstanbulReportConfig()
         def writer = new CoverageReportWriter()
         IstanbulReport report = new IstanbulReport(percentage: 80)
-        writer.config = config
-        writer.reports = [(project as Project): report]
 
         when:
         config.colorEnabled = enabled

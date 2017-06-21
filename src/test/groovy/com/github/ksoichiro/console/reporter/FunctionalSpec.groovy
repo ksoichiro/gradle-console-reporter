@@ -148,7 +148,7 @@ class FunctionalSpec extends Specification {
         when:
         def result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
-            .withArguments("check")
+            .withArguments("check", "-s")
             .withPluginClasspath(pluginClasspath)
             .build()
         def stdout = result.output

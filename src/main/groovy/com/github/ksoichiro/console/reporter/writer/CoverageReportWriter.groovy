@@ -17,7 +17,7 @@ class CoverageReportWriter extends ReportWriter<CoverageReport, CoverageReportCo
         project.gradle.buildFinished {
             println ""
             println "Coverage summary:"
-            def maxLength = reports.keySet().max { it.name.length() }.name.length()
+            def maxLength = reports.keySet().max { it.name.length() }?.name?.length()
             reports.each { Project p, CoverageReport report ->
                 println(
                     toAnsi("${adjustedProjectName(p, maxLength)} ${rightAlignedCoverage(report.c0Coverage)}",
