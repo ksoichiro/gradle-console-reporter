@@ -383,8 +383,9 @@ consoleReporter {
         // Default is true.
         enabled true
 
-        // Set this property to false if you want to see console report always.
-        onlyWhenCoverageTaskExecuted true
+        // Set this property to true if you want to see console report only when coverage is executed.
+        // Default is false.
+        onlyWhenCoverageTaskExecuted false
 
         // Set this property to false if you want to see console report
         // just after each project's istanbul task.

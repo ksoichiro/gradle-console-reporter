@@ -56,7 +56,7 @@ class ReportCoverageTask extends DefaultTask {
         if (extension.cobertura.enabled && project.rootProject.allprojects.any { it.plugins.hasPlugin('net.saliman.cobertura')}) {
             reportCobertura()
         }
-        if (extension.istanbul.enabled) {
+        if (extension.istanbul.enabled && project.rootProject.allprojects.any { it.plugins.hasPlugin('com.moowork.node')}) {
             reportIstanbul()
         }
         if (extension.total.enabled) {

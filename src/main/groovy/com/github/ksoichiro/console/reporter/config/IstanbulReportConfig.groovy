@@ -1,5 +1,7 @@
 package com.github.ksoichiro.console.reporter.config
 
 class IstanbulReportConfig extends CoverageReportConfig {
-    IstanbulReportConfig() {}
+    IstanbulReportConfig() {
+        onlyWhenCoverageTaskExecuted = false
+    }
 }
