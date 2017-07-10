@@ -27,7 +27,7 @@ class JUnitReportWriterSpec extends Specification {
 
     def stripBrackets() {
         expect:
-        expected == JUnitReportWriter.stripBrackets(input)
+        expected == JUnitReportWriter.stripSquareBrackets(input)
 
         where:
         input                  || expected

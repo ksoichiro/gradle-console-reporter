@@ -1,0 +1,9 @@
+image: java:latest
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - "./gradlew clean test check"

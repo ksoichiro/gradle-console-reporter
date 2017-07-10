@@ -2,7 +2,8 @@ package com.github.ksoichiro.console.reporter
 
 import com.github.ksoichiro.console.reporter.config.CoberturaReportConfig
 import com.github.ksoichiro.console.reporter.report.CoberturaReport
-import com.github.ksoichiro.console.reporter.writer.CoberturaReportWriter
+import com.github.ksoichiro.console.reporter.writer.CoverageReportWriter
+
 //import org.fusesource.jansi.AnsiConsole
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -13,7 +14,7 @@ import spock.lang.Specification
 //import static org.fusesource.jansi.Ansi.Color.*
 
 class ReportCoverageWithCoberturaSpec extends Specification {
-    static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
+    static final String PLUGIN_ID = 'com.bti360.console.reporter'
 
     @Rule
     public final TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -167,16 +168,13 @@ class ReportCoverageWithCoberturaSpec extends Specification {
 
     def messageColor() {
         setup:
-        Project project = ProjectBuilder.builder().build()
         CoberturaReportConfig config = new CoberturaReportConfig()
-        def writer = new CoberturaReportWriter()
+        def writer = new CoverageReportWriter()
         CoberturaReport report = new CoberturaReport(lineRate: 80)
-        writer.config = config
-        writer.reports = [(project as Project): report]
 
         when:
         config.colorEnabled = enabled
-        def actual = writer.toAnsi(message, report)
+        def actual = writer.toAnsi(message, report, config)
 
         then:
         expected == actual

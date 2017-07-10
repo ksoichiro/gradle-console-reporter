@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.gradle.publish:plugin-publish-plugin:0.9.2'
+        classpath 'com.gradle.publish:plugin-publish-plugin:0.9.7'
     }
 }
 
@@ -15,10 +15,13 @@ plugins {
     id 'maven-publish'
     id 'net.saliman.cobertura' version '2.3.0'
     id 'com.github.kt3k.coveralls' version '2.4.0'
-//    id 'com.github.ksoichiro.console.reporter' version '0.3.4'
+    id 'com.bti360.console.reporter' version '0.6.0'
 }
 
 repositories {
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
     mavenCentral()
 }
 
@@ -51,6 +54,7 @@ dependencies {
         exclude module: 'groovy-all'
     }
     testRuntime 'cglib:cglib-nodep:3.2.0'
+    testRuntime 'com.moowork.gradle:gradle-node-plugin:1.1.1'
     testCompile 'net.saliman:gradle-cobertura-plugin:2.3.0'
 }
 

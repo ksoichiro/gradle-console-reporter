@@ -16,7 +16,6 @@ class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
     JUnitReportConfig config
     boolean colorEnabled
 
-    @Override
     void write(Project project, Map<Project, JUnitReport> reports, JUnitReportConfig config) {
         this.project = project
         this.config = config
@@ -106,7 +105,7 @@ class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
         if (message == null || message.isEmpty()) {
             return
         }
-        message = stripBrackets(message)
+        message = stripSquareBrackets(message)
         printlnWithIndent(1, "testcase ${toCyan(testcase.classname)} > ${toMagenta(testcase.name)}: ${message}")
     }
 
@@ -221,7 +220,7 @@ class JUnitReportWriter extends ReportWriter<JUnitReport, JUnitReportConfig> {
     }
 
     /** Remove '[' and ']' from input */
-    static def stripBrackets(def input) {
+    static def stripSquareBrackets(def input) {
         def output = input
         (output =~ /^\[(.*)]$/).each { all, contained ->
             output = contained

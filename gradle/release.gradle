@@ -119,6 +119,9 @@ afterEvaluate { project ->
                 artifact javadocJar
             }
         }
+        repositories {
+            mavenLocal()
+        }
     }
 }
 

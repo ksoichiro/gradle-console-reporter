@@ -7,7 +7,7 @@ import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
 
 class FunctionalSpec extends Specification {
-    static final String PLUGIN_ID = 'com.github.ksoichiro.console.reporter'
+    static final String PLUGIN_ID = 'com.bti360.console.reporter'
 
     @Rule
     public final TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -148,7 +148,7 @@ class FunctionalSpec extends Specification {
         when:
         def result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
-            .withArguments("check")
+            .withArguments("check", "-s")
             .withPluginClasspath(pluginClasspath)
             .build()
         def stdout = result.output

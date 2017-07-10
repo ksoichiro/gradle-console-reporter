@@ -1,12 +1,10 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url uri('../../.repo')
-        }
+        mavenLocal()
     }
     dependencies {
-        classpath 'com.github.ksoichiro:gradle-console-reporter:+'
+        classpath 'gradle.plugin.com.bti360:gradle-console-reporter:+'
     }
 }
 
@@ -14,7 +12,7 @@ plugins {
     id 'net.saliman.cobertura' version '2.3.0'
 }
 
-apply plugin: 'com.github.ksoichiro.console.reporter'
+apply plugin: 'com.bti360.console.reporter'
 apply plugin: 'java'
 
 repositories {
