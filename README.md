@@ -114,23 +114,14 @@ If you're using JaCoCo gradle plugin,
 you can see the coverage at the end of builds:
 
 ```console
-$ ./gradlew jacocoTestReport
-:project1:compileJava
-:project1:processResources
-:project1:classes
-:project1:jacocoTestReport
-:project2-with-long-name:compileJava
-:project2-with-long-name:processResources
-:project2-with-long-name:classes
-:project2-with-long-name:jacocoTestReport
-
-BUILD SUCCESSFUL
-
-Total time: 4.912 secs
+$ ./gradlew check
 
 Coverage summary:
-project1:                72.2%
-project2-with-long-name: 44.4%
+project1:                 72.2%
+project2-with-long-name:   4.0%
+
+BUILD SUCCESSFUL in 0s
+9 actionable tasks: 1 executed, 8 up-to-date
 ```
 
 ### Cobertura coverage report
@@ -139,35 +130,27 @@ If you're using [stevesaliman/gradle-cobertura-plugin](https://github.com/steves
 you can see the coverage at the end of builds:
 
 ```console
-$ ./gradlew cobertura
-:coberturaReport UP-TO-DATE
-:compileJava UP-TO-DATE
-:processResources UP-TO-DATE
-:classes UP-TO-DATE
-:instrument
+$ ./gradlew cobertura check
+
+> Task :instrument
 Cobertura 2.1.1 - GNU GPL License (NO WARRANTY) - See COPYRIGHT file
-:copyCoberturaDatafile
-:compileTestJava UP-TO-DATE
-:processTestResources UP-TO-DATE
-:testClasses UP-TO-DATE
-:test
+
+> Task :test
 log4j:WARN No appenders could be found for logger (net.sourceforge.cobertura.coveragedata.TouchCollector).
 log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
-:generateCoberturaReport
-Cobertura 2.1.1 - GNU GPL License (NO WARRANTY) - See COPYRIGHT file
-Report time: 132ms
-Cobertura 2.1.1 - GNU GPL License (NO WARRANTY) - See COPYRIGHT file
-Report time: 111ms
-:performCoverageCheck SKIPPED
-:cobertura
 
-BUILD SUCCESSFUL
-
-Total time: 8.396 secs
+> Task :generateCoberturaReport
+Cobertura 2.1.1 - GNU GPL License (NO WARRANTY) - See COPYRIGHT file
+Report time: 198ms
+Cobertura 2.1.1 - GNU GPL License (NO WARRANTY) - See COPYRIGHT file
+Report time: 71ms
 
 Coverage summary:
-cobertura: 71.4%
+cobertura:  71.4%
+
+BUILD SUCCESSFUL in 3s
+7 actionable tasks: 7 executed
 ```
 
 ## Tasks
