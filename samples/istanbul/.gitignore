@@ -1,7 +1,5 @@
 /.idea/
 /.gradle/
-/.repo/
 /build/
-/samples/istanbul/node_modules/
 *.iml
 gradle.properties

@@ -8,6 +8,9 @@ plugins {
 }
 
 repositories {
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
     mavenCentral()
 }
 
@@ -40,6 +43,7 @@ dependencies {
         exclude module: 'groovy-all'
     }
     testRuntime 'cglib:cglib-nodep:3.2.0'
+    testRuntime 'com.moowork.gradle:gradle-node-plugin:1.1.1'
     testCompile 'net.saliman:gradle-cobertura-plugin:2.3.0'
 }
 

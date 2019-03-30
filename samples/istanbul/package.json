@@ -1,0 +1,14 @@
+{
+    "name": "istanbul-test",
+    "version": "0.0.0",
+    "scripts": {
+        "test": "karma start karma.conf.js"
+    },
+    "devDependencies": {
+        "jasmine-core": "^2.6.2",
+        "karma": "^1.7.0",
+        "karma-jasmine": "^1.1.0",
+        "karma-chrome-launcher": "^2.1.1",
+        "karma-coverage": "^1.1.1"
+    }
+}
