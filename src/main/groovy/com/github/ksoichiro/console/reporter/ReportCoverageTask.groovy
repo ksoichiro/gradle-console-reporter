@@ -5,10 +5,12 @@ import com.github.ksoichiro.console.reporter.parser.JacocoReportParser
 import com.github.ksoichiro.console.reporter.writer.CoberturaReportWriter
 import com.github.ksoichiro.console.reporter.writer.JacocoReportWriter
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
 class ReportCoverageTask extends DefaultTask {
     public static String NAME = 'reportCoverage'
+    @Internal
     ConsoleReporterExtension extension
 
     ReportCoverageTask() {
