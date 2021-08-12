@@ -25,7 +25,7 @@ Just apply the plugin in your build.gradle.
 
 ```gradle
 plugins {
-    id 'com.github.ksoichiro.console.reporter' version '0.6.2'
+    id 'com.github.ksoichiro.console.reporter' version '0.6.3'
 }
 ```
 
@@ -37,7 +37,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.github.ksoichiro:gradle-console-reporter:0.6.2'
+        classpath 'com.github.ksoichiro:gradle-console-reporter:0.6.3'
     }
 }
 
